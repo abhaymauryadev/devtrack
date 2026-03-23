@@ -4,13 +4,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") 
 }
 
 model Session {
   id        String   @id @default(uuid())
   startTime DateTime
   endTime   DateTime?
-  duration  Int?      // in seconds
+  duration  Int?
   createdAt DateTime @default(now())
 }
