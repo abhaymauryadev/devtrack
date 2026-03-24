@@ -1,10 +1,10 @@
 import Hero from "@/sections/Hero";
+import Navabar from "@/components/Navabar";
 export default function Home() {
   return (
     <div className="">
-     <Hero /> 
-
-      
+      <Navabar />
+      <Hero />
 
       {/* <div className="flex gap-4">
         <Link
