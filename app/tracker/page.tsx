@@ -1,14 +1,14 @@
 "use client";
 
 import { useTimer } from "@/hooks/useTimer";
-
+import Timer from "@/components/Timer";
 export default function TrackerPage() {
   const { start, stop, running } = useTimer();
 
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-6">
       <h1 className="text-3xl font-bold">Tracker</h1>
-
+      <Timer />
       {!running ? (
         <button
           onClick={start}
