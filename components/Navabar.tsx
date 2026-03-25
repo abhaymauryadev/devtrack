@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Navabar() {
   return (
-    <nav className="flex items-center justify-between  p-4 text-white top-0 sticky"> 
+    <nav className="flex items-center justify-between  p-4 text-white top-0 sticky z-50"> 
       <div className="flex items-center justify-between w-full border border-red-300 ">
         <div>
           <Link href="/">

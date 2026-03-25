@@ -18,7 +18,11 @@ export default function Hero() {
       <br className="hidden sm:block" /> maintain streaks, and visualize your progress
       with tactile analytics
     </p>
-
+    
+    <div className="pt-14">
+      <button className="rounded-full p-4 border cursor-pointer bg-gray-900 ">Explore Features</button>
+      <button></button>
+    </div>
   </div>
 </section>
   );
