@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Timer } from "lucide-react";
 
 export default function Features() {
   const containerRef = useRef(null);
@@ -61,12 +62,19 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          <div className="bg-gray-200 p-4 text-center">1</div>
-          <div className="bg-gray-200 p-4 text-center">2</div>
-          <div className="bg-gray-200 p-4 text-center">3</div>
-          <div className="bg-gray-200 p-4 text-center">4</div>
-          <div className="bg-gray-200 p-4 text-center">5</div>
+        <div className="grid grid-cols-5 grid-rows-5 gap-4 ">
+          <div className="border w-[20rem] p-4 rounded-lg shadow-sm space-y-3">
+            <span className="inline-flex items-center justify-center border rounded-2xl p-3">
+              <Timer />
+            </span>
+
+            <h1 className="font-bold text-2xl">Smart Timer</h1>
+
+            <p className="text-gray-500 text-sm leading-relaxed">
+              One-click time tracking with automatic session saving. Never lose
+              track of your coding hours again.
+            </p>
+          </div>
         </div>
       </section>
     </>
