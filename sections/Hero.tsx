@@ -20,7 +20,7 @@ export default function Hero() {
     </p>
     
     <div className="pt-14">
-      <button className="rounded-full p-4 border cursor-pointer bg-gray-900 ">Explore Features</button>
+      <button className="rounded-full p-4 border cursor-pointer bg-gray-900 text-sm ">Explore Features</button>
       <button></button>
     </div>
   </div>
