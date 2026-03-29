@@ -75,6 +75,45 @@ export default function Features() {
               track of your coding hours again.
             </p>
           </div>
+
+          <div className="border w-[20rem] p-4 rounded-lg shadow-sm space-y-3">
+            <span className="inline-flex items-center justify-center border rounded-2xl p-3">
+              <Timer />
+            </span>
+
+            <h1 className="font-bold text-2xl">Smart Timer</h1>
+
+            <p className="text-gray-500 text-sm leading-relaxed">
+              One-click time tracking with automatic session saving. Never lose
+              track of your coding hours again.
+            </p>
+          </div>
+
+          <div className="border w-[20rem] p-4 rounded-lg shadow-sm space-y-3">
+            <span className="inline-flex items-center justify-center border rounded-2xl p-3">
+              <Timer />
+            </span>
+
+            <h1 className="font-bold text-2xl">Smart Timer</h1>
+
+            <p className="text-gray-500 text-sm leading-relaxed">
+              One-click time tracking with automatic session saving. Never lose
+              track of your coding hours again.
+            </p>
+          </div>
+
+          <div className="border w-[20rem] p-4 rounded-lg shadow-sm space-y-3">
+            <span className="inline-flex items-center justify-center border rounded-2xl p-3">
+              <Timer />
+            </span>
+
+            <h1 className="font-bold text-2xl">Smart Timer</h1>
+
+            <p className="text-gray-500 text-sm leading-relaxed">
+              One-click time tracking with automatic session saving. Never lose
+              track of your coding hours again.
+            </p>
+          </div>
         </div>
       </section>
     </>
