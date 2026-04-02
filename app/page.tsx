@@ -1,12 +1,14 @@
 import Hero from "@/sections/Hero";
 import Navabar from "@/components/Navabar";
 import Features from "@/sections/Features";
+import Testimonials from "@/sections/Testimonials";
 export default function Home() {
   return (
     <div className="">
       <Navabar />
       <Hero />
       <Features/>
+      <Testimonials/>
 
       {/* <div className="flex gap-4">
         <Link
