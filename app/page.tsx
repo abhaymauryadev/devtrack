@@ -2,6 +2,7 @@ import Hero from "@/sections/Hero";
 import Navabar from "@/components/Navabar";
 import Features from "@/sections/Features";
 import Testimonials from "@/sections/Testimonials";
+import TextReveal from "@/sections/TextReveal";
 export default function Home() {
   return (
     <div className="">
@@ -9,6 +10,7 @@ export default function Home() {
       <Hero />
       <Features/>
       <Testimonials/>
+      <TextReveal/>
 
       {/* <div className="flex gap-4">
         <Link
