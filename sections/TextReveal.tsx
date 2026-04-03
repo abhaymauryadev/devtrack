@@ -17,7 +17,7 @@ export default function TextReveal() {
       {
         width: "100%",
         ease: "none",
-         stagger: 0.3, 
+        stagger: 0.3, 
         scrollTrigger: {
           trigger: fillRef.current,
           start: "top center",
