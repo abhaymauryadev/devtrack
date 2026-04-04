@@ -3,7 +3,7 @@ import Navabar from "@/components/Navabar";
 import Features from "@/sections/Features";
 import Testimonials from "@/sections/Testimonials";
 import TextReveal from "@/sections/TextReveal";
-import NewsLetter from "@/components/footer-column";
+import FooterNewsletter from "@/components/FooterNewsletter";
 
 export default function Home() {
   return (
@@ -11,9 +11,9 @@ export default function Home() {
       <Navabar />
       <Hero />
       <Features/>
-      <TextReveal/>
       <Testimonials/>
-      <NewsLetter/>
+      <TextReveal/>
+      <FooterNewsletter/>
 
       {/* <div className="flex gap-4">
         <Link
