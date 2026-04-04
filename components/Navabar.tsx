@@ -1,8 +1,16 @@
+"use client"
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from 'next/navigation';
 
 export default function Navabar() {
+   const router = useRouter();
+
+
+   const login_page = () => {
+    router.push('/login'); // Navigates to /about
+  };
+
   return (
     <nav className="flex items-center justify-between  p-4 text-white top-0 sticky z-50"> 
       <div className="flex items-center justify-between w-full border border-red-300 ">
@@ -13,12 +21,12 @@ export default function Navabar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+          <button onClick={login_page} className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer">
             {" "}
             login
           </button>
-          <button className="bg-green-500 text-white px-4 py-2 rounded-md">
-            signup
+          <button  className="bg-green-500 text-white px-4 py-2 rounded-md cursor-pointer">
+            signup 
           </button>
         </div>
       </div>
