@@ -12,7 +12,7 @@ export default function TextReveal() {
 
     const spans = gsap.utils.toArray(".fill-span");
 
-    spans.forEach((el, i) => {
+    spans.forEach((el:any , i:any) => {
       gsap.to(el, {
         width: "100%",
         ease: "none",
@@ -28,7 +28,7 @@ export default function TextReveal() {
 
     const spans_1 = gsap.utils.toArray(".fill-span-1");
 
-    spans_1.forEach((el, i) => {
+    spans_1.forEach((el:any, i:any) => {
       gsap.to(el, {
         width: "100%",
         ease: "none",
@@ -44,7 +44,7 @@ export default function TextReveal() {
 
      const spans_2 = gsap.utils.toArray(".fill-span_2");
 
-    spans_2.forEach((el, i) => {
+    spans_2.forEach((el:any, i:any) => {
       gsap.to(el, {
         width: "100%",
         ease: "none",
@@ -61,7 +61,7 @@ export default function TextReveal() {
 
   return (
     <section className="min-h-screen py-16">
-      <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 text-left items-center  border h-160 lg:gap-12">
+      <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 text-left items-center   h-160 lg:gap-12">
         {/* LEFT: Image */}
         <div className="flex justify-center order-2 lg:order-1">
           <img
@@ -146,7 +146,7 @@ export default function TextReveal() {
       </div>
 
 
-     <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 text-left items-center  border h-160 lg:gap-12">
+     <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 text-left items-center h-160 lg:gap-12">
         {/* LEFT: Image */}
         <div className="flex justify-center order-2 lg:order-1">
           <img
