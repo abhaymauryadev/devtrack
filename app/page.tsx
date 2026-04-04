@@ -9,8 +9,8 @@ export default function Home() {
       <Navabar />
       <Hero />
       <Features/>
-      <Testimonials/>
       <TextReveal/>
+      <Testimonials/>
 
       {/* <div className="flex gap-4">
         <Link
