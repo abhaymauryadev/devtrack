@@ -335,7 +335,7 @@ export default function LoginPage() {
             <div className="size-8 rounded-lg bg-primary-foreground/10 backdrop-blur-sm flex items-center justify-center">
               <Sparkles className="size-4" />
             </div>
-            <span>YourBrand</span>
+            <span className="text-white dark:text-black">YourBrand</span>
           </div>
         </div>
 
@@ -500,7 +500,7 @@ export default function LoginPage() {
               </div>
               {/* Horizontal line for mouth */}
               <div 
-                className="absolute w-20 h-[4px] bg-[#2D2D2D] rounded-full transition-all duration-200 ease-out"
+                className="absolute w-20 h-1 bg-[#2D2D2D] rounded-full transition-all duration-200 ease-out"
                 style={{
                   left: (password.length > 0 && showPassword) ? `${10}px` : `${40 + (yellowPos.faceX || 0)}px`,
                   top: (password.length > 0 && showPassword) ? `${88}px` : `${88 + (yellowPos.faceY || 0)}px`,
@@ -510,7 +510,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="relative z-20 flex items-center gap-8 text-sm text-primary-foreground/60">
+        <div className="relative z-20 flex items-center gap-8 text-sm text-white dark:text-black">
           <a href="#" className="hover:text-primary-foreground transition-colors">
             Privacy Policy
           </a>
@@ -529,7 +529,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Login Section */}
-      <div className="flex items-center justify-center p-8 ">
+      <div className="flex items-center justify-center p-8  ">
         <div className="w-full max-w-105">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-12">
@@ -650,4 +650,3 @@ export default function LoginPage() {
 
 
 
-// export const Component = LoginPage;

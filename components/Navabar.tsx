@@ -11,6 +11,9 @@ export default function Navabar() {
     router.push('/login'); // Navigates to /about
   };
 
+  const signup_page = () => {
+    router.push('/signup'); // Navigates to /about
+  };
   return (
     <nav className="flex items-center justify-between  p-4 text-white top-0 sticky z-50"> 
       <div className="flex items-center justify-between w-full border border-red-300 ">
@@ -25,7 +28,7 @@ export default function Navabar() {
             {" "}
             login
           </button>
-          <button  className="bg-green-500 text-white px-4 py-2 rounded-md cursor-pointer">
+          <button onClick={signup_page}  className="bg-green-500 text-white px-4 py-2 rounded-md cursor-pointer">
             signup 
           </button>
         </div>
