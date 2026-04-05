@@ -40,7 +40,7 @@ const socialIcons = [
 
 export default function FooterNewsletter() {
   return (
-    <footer className="bg-background text-foreground relative w-full pt-20 pb-10">
+    <footer className="bg-background text-foreground relative w-full pt-20 pb-10 ">
       <div className="pointer-events-none absolute top-0 left-0 z-0 h-full w-full overflow-hidden">
         <div className="bg-primary absolute top-1/3 left-1/4 h-64 w-64 rounded-full opacity-10 blur-3xl" />
         <div className="bg-primary absolute right-1/4 bottom-1/4 h-80 w-80 rounded-full opacity-10 blur-3xl" />
@@ -98,7 +98,7 @@ export default function FooterNewsletter() {
                   />
                 </svg>
               </div>
-              <span className="text-xl font-bold">Acme Inc.</span>
+              <span className="text-xl font-bold">Dev Track - For Coder.</span>
             </div>
             <p className="text-foreground/60 mb-6">
               Empowering businesses with reliable, scalable, and innovative
@@ -136,7 +136,7 @@ export default function FooterNewsletter() {
         </div>
         <div className="border-foreground/10 flex flex-col items-center justify-between border-t pt-8 md:flex-row">
           <p className="text-foreground/60 mb-4 text-sm md:mb-0">
-            © 2023 Acme Inc. All rights reserved.
+            © {new Date().getFullYear()}. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-6">
             {legalLinks.map((text) => (
