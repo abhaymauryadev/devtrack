@@ -1,6 +1,7 @@
 "use client";
 
 import { useTimer } from "@/hooks/useTimer";
+import { number } from "motion";
 import { useState } from "react";
 
 const MODES = {
@@ -10,16 +11,13 @@ const MODES = {
 };
 
 export default function Timer() {
-  const { start, stop, running } = useTimer();
-  const [mode, setMode] = useState<"FOCUS" | "SHORT_BREAK" | "LONG_BREAK">(
-    "FOCUS",
-  );
-  const [time, setTime] = useState(MODES.FOCUS);
+  const { time, setTime, start, stop, running } = useTimer(); 
+  const [mode, setMode] = useState<"FOCUS" | "SHORT_BREAK" | "LONG_BREAK">("FOCUS");
 
   return (
-    <div className="flex gap-4 justify-center items-center">
-      {/* Mode selection */}
+    <div className="flex flex-col gap-4 items-center">
 
+      {/* Mode selection */}
       <div className="flex gap-2">
         <button
           onClick={() => {
@@ -30,37 +28,34 @@ export default function Timer() {
         >
           25 min Focus
         </button>
-      </div>
 
-      <div className="flex gap-2">
         <button
           onClick={() => {
             setMode("SHORT_BREAK");
-            setTime(MODES.FOCUS);
+            setTime(MODES.SHORT_BREAK);
           }}
           className="bg-purple-500 px-3 py-1 text-white"
         >
           5 min Break
         </button>
-      </div>
 
-      <div className="flex gap-2">
         <button
           onClick={() => {
             setMode("LONG_BREAK");
-            setTime(MODES.FOCUS);
+            setTime(MODES.LONG_BREAK);
           }}
           className="bg-yellow-500 px-3 py-1 text-white"
         >
-          25 min Focus
+          10 min Long Break
         </button>
       </div>
 
       {/* Timer Display */}
-      <div className="text-3xl font-bold">
+      <div className="text-4xl font-bold">
         {Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}
       </div>
 
+      {/* Start / Stop */}
       {!running ? (
         <button onClick={start} className="bg-green-500 px-4 py-2 text-white">
           Start
