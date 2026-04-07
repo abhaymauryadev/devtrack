@@ -1,7 +1,6 @@
 "use client";
 
 import { useTimer } from "@/hooks/useTimer";
-import { number } from "motion";
 import { useState } from "react";
 
 const MODES = {
@@ -15,7 +14,8 @@ export default function Timer() {
   const [mode, setMode] = useState<"FOCUS" | "SHORT_BREAK" | "LONG_BREAK">("FOCUS");
 
   return (
-    <div className="flex flex-col gap-4 items-center">
+    <>
+    <div className="flex flex-col gap-4 justify-center items-center min-h-screen ">
 
       {/* Mode selection */}
       <div className="flex gap-2">
@@ -26,7 +26,7 @@ export default function Timer() {
           }}
           className="bg-blue-500 px-3 py-1 text-white"
         >
-          25 min Focus
+          Focus
         </button>
 
         <button
@@ -36,7 +36,7 @@ export default function Timer() {
           }}
           className="bg-purple-500 px-3 py-1 text-white"
         >
-          5 min Break
+           Break
         </button>
 
         <button
@@ -46,7 +46,7 @@ export default function Timer() {
           }}
           className="bg-yellow-500 px-3 py-1 text-white"
         >
-          10 min Long Break
+         Long Break
         </button>
       </div>
 
@@ -64,7 +64,11 @@ export default function Timer() {
         <button onClick={stop} className="bg-red-500 px-4 py-2 text-white">
           Stop
         </button>
-      )}
+      )}   
+      <div>
+        
+      </div>   
     </div>
+    </>  
   );
 }

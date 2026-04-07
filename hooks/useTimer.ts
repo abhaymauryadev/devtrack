@@ -6,7 +6,7 @@ export const useTimer = () => {
   const [running, setRunning] = useState(false);
   const [time, setTime] = useState(1500); // 25 min default
 
-  // ✅ Timer logic
+  //  Timer logic
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
@@ -19,14 +19,14 @@ export const useTimer = () => {
     return () => clearInterval(interval);
   }, [running, time]);
 
-  // ✅ Start session + timer
+  // Start session + timer
   const start = async () => {
     const data = await startSession();
     setSessionId(data.id);
     setRunning(true);
   };
 
-  // ✅ Stop session + timer
+  // Stop session + timer
   const stop = async () => {
     if (!sessionId) return;
     await stopSession(sessionId);
