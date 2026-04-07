@@ -2,6 +2,7 @@
 
 import { useTimer } from "@/hooks/useTimer";
 import { useState } from "react";
+import Streak from "./Streak";
 
 const MODES = {
   FOCUS: 25 * 60,
@@ -66,7 +67,7 @@ export default function Timer() {
         </button>
       )}   
       <div>
-        
+        <Streak/>
       </div>   
     </div>
     </>  
