@@ -4,9 +4,9 @@ import { startSession, stopSession } from "@/services/tracker.services";
 export const useTimer = () => {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
-  const [time, setTime] = useState(1500); // 25 min default
+  const [time, setTime] = useState(1500);
 
-  //  Timer logic
+  // Timer logic
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
@@ -19,14 +19,14 @@ export const useTimer = () => {
     return () => clearInterval(interval);
   }, [running, time]);
 
-  // Start session + timer
+  // Start session
   const start = async () => {
     const data = await startSession();
     setSessionId(data.id);
     setRunning(true);
   };
 
-  // Stop session + timer
+  // Stop session
   const stop = async () => {
     if (!sessionId) return;
     await stopSession(sessionId);
@@ -34,5 +34,17 @@ export const useTimer = () => {
     setSessionId(null);
   };
 
-  return { time, setTime, start, stop, running };
+  //  Reset (fixed)
+  const reset = async () => {
+    if (sessionId) {
+      await stopSession(sessionId); // stop backend session
+    }
+
+    setRunning(false);
+    setSessionId(null);
+    setTime(1500); // you can override from UI later
+  };
+
+  //  RETURN reset
+  return { time, setTime, start, stop, reset, running };
 };
