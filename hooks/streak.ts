@@ -1,33 +1,44 @@
 type Session = {
-  date: string;
+  startTime: string; // from backend
 };
 
 export const calculateStreak = (sessions: Session[] = []): number => {
   if (!sessions.length) return 0;
 
-  const uniqueDates = Array.from(
-    new Set(
-      sessions.map((session) =>
-        new Date(session.date).toISOString().split("T")[0],
-      ),
-    ),
-  ).sort((a, b) => b.localeCompare(a));
+  //  Step 1: Convert to YYYY-MM-DD (day only)
+  const days = sessions
+    .map((s) => {
+      const d = new Date(s.startTime);
+
+      if (isNaN(d.getTime())) return null;
+
+      return d.toISOString().split("T")[0];
+    })
+    .filter(Boolean);
+
+  //  Step 2: Unique days only
+  const uniqueDays = [...new Set(days as string[])].sort((a, b) =>
+    b.localeCompare(a)
+  );
 
   let streak = 0;
-  let currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
 
-  for (const dateString of uniqueDates) {
-    const sessionDate = new Date(dateString);
+  // Step 3: Start from today
+  let current = new Date();
+  current.setHours(0, 0, 0, 0);
+
+  for (const day of uniqueDays) {
+    const sessionDate = new Date(day);
     sessionDate.setHours(0, 0, 0, 0);
 
-    const diffDays = Math.round(
-      (currentDate.getTime() - sessionDate.getTime()) / (1000 * 60 * 60 * 24),
-    );
+    const diff =
+      (current.getTime() - sessionDate.getTime()) /
+      (1000 * 60 * 60 * 24);
 
-    if (diffDays === 0 || diffDays === 1) {
+    //  Only count if today or yesterday
+    if (diff === 0 || diff === 1) {
       streak++;
-      currentDate = sessionDate;
+      current = sessionDate;
     } else {
       break;
     }

@@ -10,7 +10,7 @@ export default function Streak() {
 
   useEffect(() => {
     const fetchSessions = async () => {
-      const res = await fetch("/api/v1/tracker");
+      const res = await fetch("/api/v1/streak");
       const data = await res.json();
 
       const streakCount = calculateStreak(data);
