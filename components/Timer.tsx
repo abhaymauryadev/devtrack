@@ -4,7 +4,7 @@ import { useTimer } from "@/hooks/useTimer";
 import { useState, useEffect } from "react";
 import Streak from "./Streak";
 import { PictureInPicture2, TimerReset } from "lucide-react";
-import { div } from "motion/react-client";
+
 
 const MODES = {
   FOCUS: 25 * 60,
@@ -54,13 +54,16 @@ export default function Timer() {
 
     setHidden(true); // ✅ hide background timer
   };
+    
 
+  
   // 👇 If hidden, show minimal UI instead
   if (hidden) {
     return (
       <div></div>
     );
   }
+  
  
   return (
     <div className="flex flex-col gap-4 justify-center items-center min-h-screen">
