@@ -1,12 +1,12 @@
 "use client";
-import React from "react";
+import { ChartNoAxesColumnIncreasing, LayoutDashboard, Logs, Timer } from "lucide-react";
 import { useState } from "react";
 
 const menuItems = [
-  { id: "dashboard", label: "Dashboard", icon: "📊" },
-  { id: "tracker", label: "Tracker", icon: "📈" },
-  { id: "log", label: "Log", icon: "📝" },
-  { id: "analytics", label: "Analytics", icon: "📊" },
+  { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard/> },
+  { id: "tracker", label: "Tracker", icon: <Timer/> },
+  { id: "log", label: "Log", icon: <Logs /> },
+  { id: "analytics", label: "Analytics", icon: <ChartNoAxesColumnIncreasing /> },
 ];
 
 export default function page() {
@@ -15,7 +15,7 @@ export default function page() {
   return (
     <>
       <section>
-        <aside className="fixed left-0 top-0 h-screen w-64 bg-linear-to-b from-slate-900 to-slate-950 shadow-2xl z-50 flex flex-col p-8 border-r border-slate-800">
+        <aside className="fixed left-0 top-0 h-screen gap-2 w-64 bg-linear-to-b from-slate-900 to-slate-950 shadow-2xl z-50 flex flex-col p-8 border-r border-slate-800">
           {menuItems.map((item) => (
             <button
               key={item.id}
@@ -24,8 +24,8 @@ export default function page() {
             w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200 ease-out
             ${
               activeItem === item.id
-                ? "bg-blue-500/20 text-blue-400 border-l-4 border-blue-500 pl-6 shadow-lg"
-                : "text-slate-400 hover:text-white hover:bg-white/10 hover:pl-6 hover:shadow-md"
+                ? "bg-blue-500/20 text-blue-400  border-blue-500"
+                : "text-slate-400 hover:text-white hover:bg-white/10  hover:shadow-md"
             }
             group
           `}
