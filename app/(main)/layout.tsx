@@ -10,18 +10,47 @@ import {
 import { useRouter, usePathname } from "next/navigation";
 
 const menuItems = [
-  { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard />, path: "/dashboard" },
-  { id: "tracker", label: "Tracker", icon: <Timer />, path: "/tracker" },
-  { id: "logs", label: "Logs", icon: <Logs />, path: "/logs" },
-  { id: "analytics", label: "Analytics", icon: <ChartNoAxesColumnIncreasing />, path: "/analytics" },
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    icon: <LayoutDashboard />,
+    path: "/dashboard",
+  },
+  {
+    id: "tracker",
+    label: "Tracker",
+    icon: <Timer />,
+    path: "/previewtracker",
+  },
+  {
+    id: "logs",
+    label: "Logs",
+    icon: <Logs />,
+    path: "/logs",
+  },
+  {
+    id: "analytics",
+    label: "Analytics",
+    icon: <ChartNoAxesColumnIncreasing />,
+    path: "/analytics",
+  },
 ];
 
-export default function Page() {
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
   const pathname = usePathname();
 
+  // 🔥 Get current page name
+  const currentPage =
+    menuItems.find((item) => item.path === pathname)?.label || "Dashboard";
+
   return (
-    <section>
+    <div className="flex">
+      {/* ✅ Sidebar */}
       <aside className="fixed left-0 top-0 h-screen gap-2 w-64 bg-linear-to-b from-slate-900 to-slate-950 shadow-2xl z-50 flex flex-col p-8 border-r border-slate-800">
         {menuItems.map((item) => {
           const isActive = pathname === item.path;
@@ -47,9 +76,15 @@ export default function Page() {
         })}
       </aside>
 
-      <div className="ml-64 p-6">
-        {/* Your page content */}
-      </div>
-    </section>
+      {/* ✅ Main Content Area */}
+      <main className="ml-64 w-full min-h-screen bg-slate-950 p-6">
+        {/* 🔥 Dynamic Page Title */}
+        {/* <h1 className="text-2xl font-bold text-white mb-6">
+          {currentPage}
+        </h1> */}
+
+        {children}
+      </main>
+    </div>
   );
 }
