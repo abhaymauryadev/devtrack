@@ -20,6 +20,7 @@ const MODES = {
 };
 
 export default function Timer() {
+  const [bgImage, setBgImage] = useState<string | null>(null);
   const { time, setTime, start, stop, reset, running } = useTimer();
   const router = useRouter();
 
@@ -53,7 +54,7 @@ export default function Timer() {
     if (mode === "LONG_BREAK") setTime(MODES.LONG_BREAK);
   };
 
-  // 🚀 Open popup + hide UI
+  //  Open popup + hide UI
   const openPopup = () => {
     window.open(
       "/popup",

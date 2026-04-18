@@ -20,8 +20,8 @@ const menuItems = [
     path: "/dashboard",
   },
   {
-    id: "tracker",
-    label: "Tracker",
+    id: "preivewtracker",
+    label: "Preview Tracker",
     icon: <Timer />,
     path: "/previewtracker",
   },
@@ -90,7 +90,7 @@ export default function MainLayout({
       </div>
 
       {/* ✅ Desktop Sidebar */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-slate-900 flex-col p-6 border-r border-slate-800">
+      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 gap-2 bg-slate-900 flex-col p-6 border-r border-slate-800 transition-all ease-in-out ">
         <SidebarContent />
       </aside>
 
