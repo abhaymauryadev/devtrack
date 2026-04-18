@@ -13,6 +13,37 @@ import {
   Cell,
 } from "recharts";
 
+type DayData = {
+  date: string;
+  hours: number;
+};
+
+function getLevel(hours: number) {
+  if (hours === 0) return 0;
+  if (hours < 2) return 1;
+  if (hours < 5) return 2;
+  return 3;
+}
+
+function generateDays() {
+  const days = [];
+  const today = new Date();
+
+  for (let i = 0; i < 90; i++) {
+    const d = new Date();
+    d.setDate(today.getDate() - i);
+
+    days.push({
+      date: d.toISOString().split("T")[0],
+      hours: Math.floor(Math.random() * 6), // replace later
+    });
+  }
+
+  return days.reverse();
+}
+
+const days = generateDays();
+
 const activityData = [
   { date: "Mar 22", hours: 2 },
   { date: "Mar 23", hours: 5 },
@@ -53,7 +84,14 @@ const techData = [
   { name: "Python", value: 10 },
 ];
 
-const COLORS = ["#6366F1", "#06B6D4", "#EF4444", "#22C55E", "#A855F7", "#F59E0B"];
+const COLORS = [
+  "#6366F1",
+  "#06B6D4",
+  "#EF4444",
+  "#22C55E",
+  "#A855F7",
+  "#F59E0B",
+];
 
 export default function AnalyticsPage() {
   return (
@@ -126,32 +164,34 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Heatmap */}
-        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-          <h2 className="mb-4 text-lg font-semibold">Consistency Map</h2>
+        <div className="flex gap-1">
+          {Array.from({ length: Math.ceil(days.length / 7) }).map(
+            (_, weekIndex) => (
+              <div key={weekIndex} className="flex flex-col gap-1">
+                {days.slice(weekIndex * 7, weekIndex * 7 + 7).map((day, i) => {
+                  const level = getLevel(day.hours);
 
-          <div className="grid grid-cols-12 gap-2">
-            {Array.from({ length: 60 }).map((_, i) => {
-              const level = Math.floor(Math.random() * 4);
-
-              return (
-                <div
-                  key={i}
-                  className={`
-                    w-4 h-4 rounded-sm
-                    ${
-                      level === 0
-                        ? "bg-slate-800"
-                        : level === 1
-                        ? "bg-indigo-900"
-                        : level === 2
-                        ? "bg-indigo-600"
-                        : "bg-indigo-400"
-                    }
-                  `}
-                />
-              );
-            })}
-          </div>
+                  return (
+                    <div
+                      key={i}
+                      className={`
+              w-3 h-3 rounded-sm
+              ${
+                level === 0
+                  ? "bg-slate-800"
+                  : level === 1
+                    ? "bg-indigo-900"
+                    : level === 2
+                      ? "bg-indigo-600"
+                      : "bg-indigo-400"
+              }
+            `}
+                    />
+                  );
+                })}
+              </div>
+            ),
+          )}
         </div>
       </div>
     </div>
