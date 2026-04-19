@@ -6,7 +6,7 @@ export default function LogsPage() {
   const [sessions, setSessions] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("/api/sessions")
+    fetch("/api/v1/session")
       .then((res) => res.json())
       .then((data) => setSessions(data));
   }, []);
@@ -28,7 +28,7 @@ export default function LogsPage() {
 
             <p>
               <strong>End:</strong>{" "}
-              {session.endTJime
+              {session.endTime
                 ? new Date(session.endTime).toLocaleString()
                 : "Running"}
             </p>
