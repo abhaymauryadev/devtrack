@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  LineChart,
-  Line,
   XAxis,
   Tooltip,
   ResponsiveContainer,
@@ -13,11 +11,14 @@ import {
   Cell,
 } from "recharts";
 
+import { useEffect, useState } from "react";
+
 type DayData = {
   date: string;
   hours: number;
 };
 
+// 🔹 Convert hours → intensity
 function getLevel(hours: number) {
   if (hours === 0) return 0;
   if (hours < 2) return 1;
@@ -25,8 +26,9 @@ function getLevel(hours: number) {
   return 3;
 }
 
-function generateDays() {
-  const days = [];
+// 🔹 Generate last 90 days (TEMP data)
+function generateDays(): DayData[] {
+  const days: DayData[] = [];
   const today = new Date();
 
   for (let i = 0; i < 90; i++) {
@@ -35,15 +37,14 @@ function generateDays() {
 
     days.push({
       date: d.toISOString().split("T")[0],
-      hours: Math.floor(Math.random() * 6), // replace later
+      hours: Math.floor(Math.random() * 6), // replace with real data later
     });
   }
 
   return days.reverse();
 }
 
-const days = generateDays();
-
+// 🔹 Chart data
 const activityData = [
   { date: "Mar 22", hours: 2 },
   { date: "Mar 23", hours: 5 },
@@ -94,6 +95,13 @@ const COLORS = [
 ];
 
 export default function AnalyticsPage() {
+  const [days, setDays] = useState<DayData[]>([]);
+
+  //  FIX hydration issue
+  useEffect(() => {
+    setDays(generateDays());
+  }, []);
+
   return (
     <div className="p-6 space-y-6 bg-slate-950 min-h-screen text-white">
       {/* Header */}
@@ -104,7 +112,7 @@ export default function AnalyticsPage() {
         </p>
       </div>
 
-      {/* Line Chart */}
+      {/* Activity Chart */}
       <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
         <h2 className="mb-4 text-lg font-semibold">30-Day Activity</h2>
 
@@ -128,9 +136,9 @@ export default function AnalyticsPage() {
         </ResponsiveContainer>
       </div>
 
-      {/* Bottom Grid */}
+      {/* Bottom Section */}
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Donut Chart */}
+        {/*  Donut Chart */}
         <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
           <h2 className="mb-4 text-lg font-semibold">Time by Tech Stack</h2>
 
@@ -163,35 +171,56 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Heatmap */}
-        <div className="flex gap-1">
-          {Array.from({ length: Math.ceil(days.length / 7) }).map(
-            (_, weekIndex) => (
-              <div key={weekIndex} className="flex flex-col gap-1">
-                {days.slice(weekIndex * 7, weekIndex * 7 + 7).map((day, i) => {
-                  const level = getLevel(day.hours);
+        {/* 🟦 Heatmap */}
+        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h2 className="mb-4 text-lg font-semibold">Consistency Map</h2>
 
-                  return (
-                    <div
-                      key={i}
-                      className={`
-              w-3 h-3 rounded-sm
-              ${
-                level === 0
-                  ? "bg-slate-800"
-                  : level === 1
-                    ? "bg-indigo-900"
-                    : level === 2
-                      ? "bg-indigo-600"
-                      : "bg-indigo-400"
-              }
-            `}
-                    />
-                  );
-                })}
-              </div>
-            ),
+          {days.length > 0 && (
+            <div className="flex gap-1 overflow-x-auto">
+              {Array.from({
+                length: Math.ceil(days.length / 7),
+              }).map((_, weekIndex) => (
+                <div key={weekIndex} className="flex flex-col gap-1 ">
+                  {days
+                    .slice(weekIndex * 7, weekIndex * 7 + 7)
+                    .map((day, i) => {
+                      const level = getLevel(day.hours);
+
+                      return (
+                        <div
+                          key={i}
+                          title={`${day.date} - ${day.hours}h`}
+                          className={`
+                            w-3 h-3 rounded-sm
+                            ${
+                              level === 0
+                                ? "bg-slate-800"
+                                : level === 1
+                                ? "bg-indigo-900"
+                                : level === 2
+                                ? "bg-indigo-600"
+                                : "bg-indigo-400"
+                            }
+                          `}
+                        />
+                      );
+                    })}
+                </div>
+              ))}
+            </div>
           )}
+
+          {/* Legend */}
+          <div className="flex items-center justify-between mt-4 text-xs text-slate-400">
+            <span>Less</span>
+            <div className="flex gap-1">
+              <div className="w-3 h-3 bg-slate-800 rounded-sm" />
+              <div className="w-3 h-3 bg-indigo-900 rounded-sm" />
+              <div className="w-3 h-3 bg-indigo-600 rounded-sm" />
+              <div className="w-3 h-3 bg-indigo-400 rounded-sm" />
+            </div>
+            <span>More</span>
+          </div>
         </div>
       </div>
     </div>

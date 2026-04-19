@@ -28,7 +28,7 @@ export default function LogsPage() {
 
             <p>
               <strong>End:</strong>{" "}
-              {session.endTime
+              {session.endTJime
                 ? new Date(session.endTime).toLocaleString()
                 : "Running"}
             </p>
