@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Label } from "@/components/Label";
@@ -94,6 +96,25 @@ interface EyeBallProps {
   forceLookY?: number;
 }
 
+type RegisteredUser = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+const STORAGE_KEY = "registered-users";
+
+const readUsers = (): RegisteredUser[] => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as RegisteredUser[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
 const EyeBall = ({ 
   size = 48, 
   pupilSize = 16, 
@@ -177,6 +198,7 @@ const EyeBall = ({
 
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -310,19 +332,32 @@ export default function LoginPage() {
     // Simulate API delay (quick)
     await new Promise(resolve => setTimeout(resolve, 300));
 
-    // Mock authentication - validate against dummy credentials
-    if (email === "erik@gmail.com" && password === "1234") {
+    const normalizedEmail = email.trim().toLowerCase();
+    const registeredUsers = readUsers();
+    const foundUser = registeredUsers.find(
+      (user) =>
+        user.email.toLowerCase() === normalizedEmail && user.password === password,
+    );
+    const isDefaultDemoUser =
+      normalizedEmail === "erik@gmail.com" && password === "1234";
+
+    if (foundUser || isDefaultDemoUser) {
       console.log("✅ Login successful!");
-      alert("Login successful! Welcome, Erik!");
-      // In a real app, you would:
-      // - Store auth token
-      // - Redirect to dashboard
-      // - Set user session
+      document.cookie =
+        "auth-token=logged-in; path=/; max-age=2592000; samesite=lax";
+      router.replace("/screen");
     } else {
       setError("Invalid email or password. Please try again.");
       console.log("❌ Login failed");
     }
 
+    setIsLoading(false);
+  };
+
+  const handleGoogleLogin = async () => {
+    setError("");
+    setIsLoading(true);
+    await signIn("google", { callbackUrl: "/screen" });
     setIsLoading(false);
   };
 
@@ -629,6 +664,8 @@ export default function LoginPage() {
               variant="outline" 
               className="w-full h-12 bg-background border-border/60 hover:bg-accent"
               type="button"
+              onClick={handleGoogleLogin}
+              disabled={isLoading}
             >
               <Mail className="mr-2 size-5" />
               Log in with Google
@@ -638,7 +675,7 @@ export default function LoginPage() {
           {/* Sign Up Link */}
           <div className="text-center text-sm text-muted-foreground mt-8">
             Don't have an account?{" "}
-            <a href="#" className="text-foreground font-medium hover:underline">
+            <a href="/signup" className="text-foreground font-medium hover:underline">
               Sign Up
             </a>
           </div>
