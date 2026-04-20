@@ -13,12 +13,17 @@ import {
 
 import { useEffect, useState } from "react";
 
+type Session = {
+  startTime: string;
+  endTime: string | null;
+  duration: number | null;
+};
+
 type DayData = {
   date: string;
   hours: number;
 };
 
-// 🔹 Convert hours → intensity
 function getLevel(hours: number) {
   if (hours === 0) return 0;
   if (hours < 2) return 1;
@@ -26,55 +31,27 @@ function getLevel(hours: number) {
   return 3;
 }
 
-// 🔹 Generate last 90 days (TEMP data)
-function generateDays(): DayData[] {
-  const days: DayData[] = [];
+function buildDayMap(sessions: Session[], days: number): DayData[] {
+  const map: Record<string, number> = {};
   const today = new Date();
 
-  for (let i = 0; i < 90; i++) {
-    const d = new Date();
+  for (let i = 0; i < days; i++) {
+    const d = new Date(today);
     d.setDate(today.getDate() - i);
-
-    days.push({
-      date: d.toISOString().split("T")[0],
-      hours: Math.floor(Math.random() * 6), // replace with real data later
-    });
+    map[d.toISOString().split("T")[0]] = 0;
   }
 
-  return days.reverse();
-}
+  for (const s of sessions) {
+    const key = new Date(s.startTime).toISOString().split("T")[0];
+    if (key in map) {
+      map[key] = parseFloat(((map[key] * 3600 + (s.duration ?? 0)) / 3600).toFixed(2));
+    }
+  }
 
-// 🔹 Chart data
-const activityData = [
-  { date: "Mar 22", hours: 2 },
-  { date: "Mar 23", hours: 5 },
-  { date: "Mar 24", hours: 3 },
-  { date: "Mar 25", hours: 6 },
-  { date: "Mar 26", hours: 2 },
-  { date: "Mar 27", hours: 1 },
-  { date: "Mar 28", hours: 4 },
-  { date: "Mar 29", hours: 5 },
-  { date: "Mar 30", hours: 6 },
-  { date: "Mar 31", hours: 3 },
-  { date: "Apr 01", hours: 5 },
-  { date: "Apr 02", hours: 2 },
-  { date: "Apr 03", hours: 6 },
-  { date: "Apr 04", hours: 3 },
-  { date: "Apr 05", hours: 2 },
-  { date: "Apr 06", hours: 4 },
-  { date: "Apr 07", hours: 4 },
-  { date: "Apr 08", hours: 3 },
-  { date: "Apr 09", hours: 2 },
-  { date: "Apr 10", hours: 2 },
-  { date: "Apr 11", hours: 3 },
-  { date: "Apr 12", hours: 5 },
-  { date: "Apr 13", hours: 4 },
-  { date: "Apr 14", hours: 5 },
-  { date: "Apr 15", hours: 2 },
-  { date: "Apr 16", hours: 3 },
-  { date: "Apr 17", hours: 4 },
-  { date: "Apr 18", hours: 6 },
-];
+  return Object.entries(map)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([date, hours]) => ({ date, hours }));
+}
 
 const techData = [
   { name: "React", value: 30 },
@@ -95,16 +72,26 @@ const COLORS = [
 ];
 
 export default function AnalyticsPage() {
-  const [days, setDays] = useState<DayData[]>([]);
+  const [activityData, setActivityData] = useState<DayData[]>([]);
+  const [heatmapDays, setHeatmapDays] = useState<DayData[]>([]);
 
-  //  FIX hydration issue
   useEffect(() => {
-    setDays(generateDays());
+    fetch("/api/v1/session")
+      .then((r) => r.json())
+      .then((sessions: Session[]) => {
+        const thirtyDay = buildDayMap(sessions, 30);
+        setActivityData(
+          thirtyDay.map((d) => ({
+            date: new Date(d.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+            hours: d.hours,
+          }))
+        );
+        setHeatmapDays(buildDayMap(sessions, 90));
+      });
   }, []);
 
   return (
     <div className="p-6 space-y-6 bg-slate-950 min-h-screen text-white">
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Deep Analytics</h1>
         <p className="text-slate-400">
@@ -112,7 +99,6 @@ export default function AnalyticsPage() {
         </p>
       </div>
 
-      {/* Activity Chart */}
       <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
         <h2 className="mb-4 text-lg font-semibold">30-Day Activity</h2>
 
@@ -120,25 +106,23 @@ export default function AnalyticsPage() {
           <AreaChart data={activityData}>
             <XAxis dataKey="date" stroke="#64748B" />
             <Tooltip />
-            <Area
-              type="monotone"
-              dataKey="hours"
-              stroke="#6366F1"
-              fill="url(#colorGradient)"
-            />
             <defs>
               <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4} />
                 <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
               </linearGradient>
             </defs>
+            <Area
+              type="monotone"
+              dataKey="hours"
+              stroke="#6366F1"
+              fill="url(#colorGradient)"
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Bottom Section */}
       <div className="grid md:grid-cols-2 gap-6">
-        {/*  Donut Chart */}
         <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
           <h2 className="mb-4 text-lg font-semibold">Time by Tech Stack</h2>
 
@@ -150,14 +134,13 @@ export default function AnalyticsPage() {
                 outerRadius={90}
                 dataKey="value"
               >
-                {techData.map((entry, index) => (
+                {techData.map((_, index) => (
                   <Cell key={index} fill={COLORS[index]} />
                 ))}
               </Pie>
             </PieChart>
           </ResponsiveContainer>
 
-          {/* Legend */}
           <div className="flex flex-wrap gap-3 mt-4 text-sm">
             {techData.map((item, i) => (
               <div key={i} className="flex items-center gap-2">
@@ -171,37 +154,32 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* 🟦 Heatmap */}
         <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
           <h2 className="mb-4 text-lg font-semibold">Consistency Map</h2>
 
-          {days.length > 0 && (
+          {heatmapDays.length > 0 && (
             <div className="flex gap-1 overflow-x-auto">
               {Array.from({
-                length: Math.ceil(days.length / 7),
+                length: Math.ceil(heatmapDays.length / 7),
               }).map((_, weekIndex) => (
-                <div key={weekIndex} className="flex flex-col gap-1 ">
-                  {days
+                <div key={weekIndex} className="flex flex-col gap-1">
+                  {heatmapDays
                     .slice(weekIndex * 7, weekIndex * 7 + 7)
                     .map((day, i) => {
                       const level = getLevel(day.hours);
-
                       return (
                         <div
                           key={i}
-                          title={`${day.date} - ${day.hours}h`}
-                          className={`
-                            w-3 h-3 rounded-sm
-                            ${
-                              level === 0
-                                ? "bg-slate-800"
-                                : level === 1
-                                ? "bg-indigo-900"
-                                : level === 2
-                                ? "bg-indigo-600"
-                                : "bg-indigo-400"
-                            }
-                          `}
+                          title={`${day.date} — ${day.hours}h`}
+                          className={`w-3 h-3 rounded-sm ${
+                            level === 0
+                              ? "bg-slate-800"
+                              : level === 1
+                              ? "bg-indigo-900"
+                              : level === 2
+                              ? "bg-indigo-600"
+                              : "bg-indigo-400"
+                          }`}
                         />
                       );
                     })}
@@ -210,7 +188,6 @@ export default function AnalyticsPage() {
             </div>
           )}
 
-          {/* Legend */}
           <div className="flex items-center justify-between mt-4 text-xs text-slate-400">
             <span>Less</span>
             <div className="flex gap-1">

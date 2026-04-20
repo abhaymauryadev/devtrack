@@ -1,27 +1,107 @@
-import Streak from '@/components/Streak';
-import React from 'react'
+import Streak from "@/components/Streak";
+import { getAllSessions } from "@/models/session.model";
+import type { Session } from "@prisma/client";
 
-export default function page() {
-   const stats = [
+function getWeekBounds() {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun, 1=Mon...
+  const diffToMon = day === 0 ? -6 : 1 - day;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diffToMon);
+  monday.setHours(0, 0, 0, 0);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+  return { monday, sunday };
+}
+
+function calcStreak(sessions: { startTime: Date }[]) {
+  const days = [
+    ...new Set(
+      sessions
+        .map((s) => {
+          const d = new Date(s.startTime);
+          return isNaN(d.getTime()) ? null : d.toISOString().split("T")[0];
+        })
+        .filter(Boolean) as string[],
+    ),
+  ].sort((a, b) => b.localeCompare(a));
+
+  let streak = 0;
+  let current = new Date();
+  current.setHours(0, 0, 0, 0);
+
+  for (const day of days) {
+    const sessionDate = new Date(day);
+    sessionDate.setHours(0, 0, 0, 0);
+    const diff =
+      (current.getTime() - sessionDate.getTime()) / (1000 * 60 * 60 * 24);
+    if (diff === 0 || diff === 1) {
+      streak++;
+      current = sessionDate;
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+export default async function page() {
+  const allSessions = await getAllSessions();
+  const { monday, sunday } = getWeekBounds();
+
+  const weekSessions = allSessions.filter((s: Session) => {
+    const t = new Date(s.startTime).getTime();
+    return t >= monday.getTime() && t <= sunday.getTime();
+  });
+
+  const totalSeconds = weekSessions.reduce(
+    (sum: number, s: Session) => sum + (s.duration ?? 0),
+    0,
+  );
+  const totalHours = parseFloat((totalSeconds / 3600).toFixed(1));
+
+  const streak = calcStreak(allSessions);
+
+  const daysWithSession = new Set(
+    weekSessions.map((s: Session) => new Date(s.startTime).toISOString().split("T")[0]),
+  );
+  const consistency = Math.round((daysWithSession.size / 7) * 100);
+
+  const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const bars = dayLabels.map((label, i) => {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+    const dateStr = date.toISOString().split("T")[0];
+    const daySessions = weekSessions.filter(
+      (s: Session) => new Date(s.startTime).toISOString().split("T")[0] === dateStr,
+    );
+    const secs = daySessions.reduce((sum: number, s: Session) => sum + (s.duration ?? 0), 0);
+    return { day: label, value: parseFloat((secs / 3600).toFixed(2)) };
+  });
+
+  const maxBar = Math.max(...bars.map((b) => b.value), 1);
+
+  const stats = [
     {
       title: "Total Hours",
-      value: "22.5",
+      value: totalHours.toString(),
       suffix: "hrs",
-      note: "+12% from last week",
+      note: "This week",
       icon: "🕒",
       iconColor: "text-cyan-400",
     },
     {
       title: "Active Streak",
-      value: "14",
+      value: streak.toString(),
       suffix: "days",
-      note: "Keep it up!",
+      note: streak > 0 ? "Keep it up!" : "Start coding today!",
       icon: "🔥",
       iconColor: "text-orange-400",
     },
     {
       title: "Sessions",
-      value: "8",
+      value: weekSessions.length.toString(),
       suffix: "logs",
       note: "This week",
       icon: "〰️",
@@ -29,26 +109,16 @@ export default function page() {
     },
     {
       title: "Consistency",
-      value: "92",
+      value: consistency.toString(),
       suffix: "%",
-      note: "Top 10% users",
+      note: `${daysWithSession.size}/7 days active`,
       icon: "📅",
       iconColor: "text-emerald-400",
     },
   ];
 
-  const bars = [
-    { day: "Mon", value: 2.6 },
-    { day: "Tue", value: 3.8 },
-    { day: "Wed", value: 1.2 },
-    { day: "Thu", value: 4.5 },
-    { day: "Fri", value: 3.1 },
-    { day: "Sat", value: 5.4 },
-    { day: "Sun", value: 2.0 },
-  ];
-
   return (
-     <main className="min-h-screen bg-[#070708] text-white">
+    <main className="min-h-screen bg-[#070708] text-white">
       <div className="mx-auto max-w-8xl px-6 py-8">
         <header className="mb-8">
           <h1 className="text-3xl font-semibold tracking-tight">
@@ -74,7 +144,9 @@ export default function page() {
 
               <div className="mt-6 flex items-end gap-2">
                 <span className="text-3xl font-semibold">{item.value}</span>
-                <span className="pb-1 text-sm text-zinc-400">{item.suffix}</span>
+                <span className="pb-1 text-sm text-zinc-400">
+                  {item.suffix}
+                </span>
               </div>
 
               <p className="mt-3 text-sm text-zinc-500">{item.note}</p>
@@ -86,23 +158,23 @@ export default function page() {
           <div className="rounded-2xl border border-zinc-800 bg-[#111113] p-6">
             <div className="mb-8 flex items-center justify-between">
               <h2 className="text-xl font-semibold">Weekly Progress</h2>
-              <select className="rounded-lg border border-zinc-800 bg-[#0c0c0d] px-3 py-2 text-sm text-zinc-300 outline-none">
-                <option>This Week</option>
-                <option>Last Week</option>
-                <option>This Month</option>
-              </select>
             </div>
 
             <div className="flex h-70 items-end justify-between gap-3 px-2">
               {bars.map((bar) => (
-                <div key={bar.day} className="flex h-full flex-1 flex-col justify-end">
+                <div
+                  key={bar.day}
+                  className="flex h-full flex-1 flex-col justify-end"
+                >
                   <div className="flex justify-center">
                     <div
                       className="w-full max-w-17.5 rounded-t-md bg-indigo-500/90 shadow-[0_0_18px_rgba(99,102,241,0.25)]"
-                      style={{ height: `${bar.value * 42}px` }}
+                      style={{ height: `${(bar.value / maxBar) * 240}px` }}
                     />
                   </div>
-                  <p className="mt-3 text-center text-xs text-zinc-500">{bar.day}</p>
+                  <p className="mt-3 text-center text-xs text-zinc-500">
+                    {bar.day}
+                  </p>
                 </div>
               ))}
             </div>
@@ -112,18 +184,17 @@ export default function page() {
             <h2 className="text-xl font-semibold">Recent Badges</h2>
 
             <div className="flex h-85 flex-col items-center justify-center text-center">
-              {/* {/* <div className="flex h-24 w-24 items-center justify-center rounded-full border border-orange-500/30 bg-orange-500/10 text-4xl shadow-[0_0_40px_rgba(249,115,22,0.18)]"> */}
-                
-               {/* </div>  */}
-
-              <h3 className="mt-6 text-lg font-semibold"><Streak/></h3>
+              <h3 className="mt-6 text-lg font-semibold">
+                <Streak />
+              </h3>
               <p className="mt-2 max-w-xs text-sm leading-6 text-zinc-400">
-                You&apos;re on fire! Code for 7 more days to unlock the Diamond badge.
+                You&apos;re on fire! Code for 7 more days to unlock the Diamond
+                badge.
               </p>
             </div>
           </div>
         </section>
       </div>
     </main>
-  )
+  );
 }
