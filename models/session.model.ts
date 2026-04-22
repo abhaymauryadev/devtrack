@@ -28,6 +28,7 @@ export const endSession = async (id: string) => {
 
 export const getAllSessions = async () => {
   return prisma.session.findMany({
+    where: { endTime: { not: null } },
     orderBy: { createdAt: "desc" },
   });
 };
