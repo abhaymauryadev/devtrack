@@ -15,7 +15,7 @@ const PROTECTED_ROUTES = [
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = await getToken({ req: request, secret: process.env.AUTH_SECRET });
+  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
   const hasLegacyCookie = Boolean(request.cookies.get("auth-token")?.value);
   const isLoggedIn = Boolean(token) || hasLegacyCookie;
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
