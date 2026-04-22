@@ -59,10 +59,10 @@ export default function MainLayout({
             key={item.id}
             onClick={() => {
               router.push(item.path);
-              setOpen(false); // close on mobile
+              setOpen(false);
             }}
             className={`
-              w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all 
+              w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all
               ${
                 isActive
                   ? "bg-blue-500/20 text-blue-400"
@@ -85,8 +85,6 @@ export default function MainLayout({
         <button onClick={() => setOpen(true)}>
           <Menu />
         </button>
-
-        {/* <h1 className="font-semibold">{currentPage}</h1> */}
       </div>
 
       {/* ✅ Desktop Sidebar */}
