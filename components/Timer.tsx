@@ -36,14 +36,6 @@ export default function Timer() {
     setMounted(true);
   }, []);
 
-  // sync for popup
-  useEffect(() => {
-    localStorage.setItem(
-      "timer-state",
-      JSON.stringify({ time, running, mode }),
-    );
-  }, [time, running, mode]);
-
   if (!mounted) return null;
 
   const handleReset = () => {
