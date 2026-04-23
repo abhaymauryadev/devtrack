@@ -14,24 +14,18 @@ import {
 } from "lucide-react";
 import { useWallpaperStore, buildBackground } from "@/store/wallpaperStore";
 import WallpaperSelector from "./WallpaperSelector";
-
-const MODES = {
-  FOCUS: 25 * 60,
-  SHORT_BREAK: 5 * 60,
-  LONG_BREAK: 10 * 60,
-};
+import { DURATIONS, TimerMode } from "@/context/TimerContext";
 
 export default function Timer() {
-  const { time, setTime, start, stop, reset, running } = useTimer();
+  const { time, setTime, start, stop, reset, running, mode, setMode, completedPomodoros } =
+    useTimer();
   const router = useRouter();
 
-  const [mode, setMode] = useState<"FOCUS" | "SHORT_BREAK" | "LONG_BREAK">(
-    "FOCUS"
-  );
   const [mounted, setMounted] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showWallpaper, setShowWallpaper] = useState(false);
+  const [breakBanner, setBreakBanner] = useState<string | null>(null);
 
   const { selected } = useWallpaperStore();
   const bgStyle = buildBackground(selected);
@@ -40,13 +34,26 @@ export default function Timer() {
     setMounted(true);
   }, []);
 
+  // Show a banner when mode changes to a break
+  useEffect(() => {
+    if (mode === "LONG_BREAK") {
+      setBreakBanner("Great work! Time for a long break (12 min).");
+    } else if (mode === "SHORT_BREAK") {
+      setBreakBanner("Session done! Take a short break (5 min).");
+    } else {
+      setBreakBanner(null);
+    }
+  }, [mode]);
+
   if (!mounted) return null;
 
   const handleReset = () => {
     reset();
-    if (mode === "FOCUS") setTime(MODES.FOCUS);
-    if (mode === "SHORT_BREAK") setTime(MODES.SHORT_BREAK);
-    if (mode === "LONG_BREAK") setTime(MODES.LONG_BREAK);
+    setTime(DURATIONS[mode]);
+  };
+
+  const handleSetMode = (m: TimerMode) => {
+    setMode(m);
   };
 
   const openPopup = () => {
@@ -60,18 +67,22 @@ export default function Timer() {
 
   if (hidden) return <div />;
 
+  const modeLabel: Record<TimerMode, string> = {
+    FOCUS: "Focus",
+    SHORT_BREAK: "Break",
+    LONG_BREAK: "Long Break",
+  };
+
   return (
     <>
       <div
         className="relative flex flex-col gap-4 justify-center items-center min-h-screen text-white"
         style={bgStyle}
       >
-        {/* dark overlay for photo wallpapers */}
         {selected.type === "image" && (
           <div className="absolute inset-0 bg-black/40 pointer-events-none" />
         )}
 
-        {/* wallpaper toggle — top-right corner */}
         <button
           onClick={() => setShowWallpaper(true)}
           title="Change wallpaper"
@@ -80,42 +91,50 @@ export default function Timer() {
           <ImageIcon size={20} />
         </button>
 
-        {/* content sits above overlay */}
         <div className="relative z-10 flex flex-col gap-4 justify-center items-center">
           {/* Mode selection */}
           <div className="flex gap-2">
-            <button
-              onClick={() => {
-                setMode("FOCUS");
-                setTime(MODES.FOCUS);
-              }}
-              className="bg-blue-500 px-3 py-1 text-white"
-            >
-              Focus
-            </button>
-
-            <button
-              onClick={() => {
-                setMode("SHORT_BREAK");
-                setTime(MODES.SHORT_BREAK);
-              }}
-              className="bg-purple-500 px-3 py-1 text-white"
-            >
-              Break
-            </button>
-
-            <button
-              onClick={() => {
-                setMode("LONG_BREAK");
-                setTime(MODES.LONG_BREAK);
-              }}
-              className="bg-yellow-500 px-3 py-1 text-white"
-            >
-              Long Break
-            </button>
+            {(["FOCUS", "SHORT_BREAK", "LONG_BREAK"] as TimerMode[]).map((m) => (
+              <button
+                key={m}
+                onClick={() => handleSetMode(m)}
+                className={`px-3 py-1 text-white transition-opacity ${
+                  m === "FOCUS"
+                    ? "bg-blue-500"
+                    : m === "SHORT_BREAK"
+                    ? "bg-purple-500"
+                    : "bg-yellow-500"
+                } ${mode === m ? "opacity-100 ring-2 ring-white/60" : "opacity-60"}`}
+              >
+                {modeLabel[m]}
+              </button>
+            ))}
           </div>
 
-          {/* Timer */}
+          {/* Pomodoro progress dots */}
+          <div className="flex items-center gap-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className={`w-3 h-3 rounded-full border-2 border-white transition-colors ${
+                  i < completedPomodoros ? "bg-white" : "bg-transparent"
+                }`}
+                title={`Pomodoro ${i + 1}`}
+              />
+            ))}
+            <span className="text-xs text-white/70 ml-1">
+              {completedPomodoros}/4
+            </span>
+          </div>
+
+          {/* Break banner */}
+          {breakBanner && (
+            <div className="px-4 py-2 rounded-lg bg-yellow-500/80 text-white text-sm font-medium text-center max-w-xs">
+              {breakBanner}
+            </div>
+          )}
+
+          {/* Timer display */}
           <div className="text-4xl font-bold lg:text-9xl md:text-7xl sm:text-5xl">
             {Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}
           </div>

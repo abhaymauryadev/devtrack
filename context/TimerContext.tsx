@@ -10,11 +10,22 @@ import {
 } from "react";
 import { startSession, stopSession } from "@/services/tracker.services";
 
+export type TimerMode = "FOCUS" | "SHORT_BREAK" | "LONG_BREAK";
+
+export const DURATIONS: Record<TimerMode, number> = {
+  FOCUS: 25 * 60,
+  SHORT_BREAK: 5 * 60,
+  LONG_BREAK: 12 * 60,
+};
+
 interface TimerContextValue {
   time: number;
   setTime: (t: number) => void;
   running: boolean;
   sessionId: string | null;
+  mode: TimerMode;
+  setMode: (m: TimerMode) => void;
+  completedPomodoros: number;
   start: () => Promise<void>;
   stop: () => Promise<void>;
   reset: () => Promise<void>;
@@ -43,16 +54,24 @@ export function TimerProvider({ children }: { children: React.ReactNode }) {
   const [running, setRunning] = useState<boolean>(
     saved.current?.running ?? false,
   );
+  const [mode, setModeState] = useState<TimerMode>(
+    saved.current?.mode ?? "FOCUS",
+  );
+  const [completedPomodoros, setCompletedPomodoros] = useState<number>(
+    saved.current?.completedPomodoros ?? 0,
+  );
   const [time, setTimeState] = useState<number>(
-    saved.current?.time ?? 1500,
+    saved.current?.time ?? DURATIONS.FOCUS,
   );
 
-  // Persist to localStorage whenever state changes
   useEffect(() => {
-    localStorage.setItem(LS_KEY, JSON.stringify({ sessionId, running, time }));
-  }, [sessionId, running, time]);
+    localStorage.setItem(
+      LS_KEY,
+      JSON.stringify({ sessionId, running, time, mode, completedPomodoros }),
+    );
+  }, [sessionId, running, time, mode, completedPomodoros]);
 
-  // Countdown interval — lives at the app level, survives navigation
+  // Countdown — survives navigation
   useEffect(() => {
     if (!running) return;
 
@@ -60,13 +79,6 @@ export function TimerProvider({ children }: { children: React.ReactNode }) {
       setTimeState((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          // Auto-complete session when timer hits 0
-          if (sessionId) {
-            stopSession(sessionId).then(() => {
-              setRunning(false);
-              setSessionId(null);
-            });
-          }
           return 0;
         }
         return prev - 1;
@@ -74,9 +86,46 @@ export function TimerProvider({ children }: { children: React.ReactNode }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [running, sessionId]);
+  }, [running]);
+
+  // React to timer reaching 0
+  useEffect(() => {
+    if (time !== 0 || !running) return;
+
+    const handleComplete = async () => {
+      if (sessionId) {
+        await stopSession(sessionId);
+        setSessionId(null);
+      }
+      setRunning(false);
+
+      if (mode === "FOCUS") {
+        const next = completedPomodoros + 1;
+        if (next >= 4) {
+          setCompletedPomodoros(0);
+          setModeState("LONG_BREAK");
+          setTimeState(DURATIONS.LONG_BREAK);
+        } else {
+          setCompletedPomodoros(next);
+          setModeState("SHORT_BREAK");
+          setTimeState(DURATIONS.SHORT_BREAK);
+        }
+      } else {
+        setModeState("FOCUS");
+        setTimeState(DURATIONS.FOCUS);
+      }
+    };
+
+    handleComplete();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [time, running]);
 
   const setTime = useCallback((t: number) => setTimeState(t), []);
+
+  const setMode = useCallback((m: TimerMode) => {
+    setModeState(m);
+    setTimeState(DURATIONS[m]);
+  }, []);
 
   const start = useCallback(async () => {
     const data = await startSession();
@@ -95,12 +144,23 @@ export function TimerProvider({ children }: { children: React.ReactNode }) {
     if (sessionId) await stopSession(sessionId);
     setRunning(false);
     setSessionId(null);
-    setTimeState(1500);
-  }, [sessionId]);
+    setTimeState(DURATIONS[mode]);
+  }, [sessionId, mode]);
 
   return (
     <TimerContext.Provider
-      value={{ time, setTime, running, sessionId, start, stop, reset }}
+      value={{
+        time,
+        setTime,
+        running,
+        sessionId,
+        mode,
+        setMode,
+        completedPomodoros,
+        start,
+        stop,
+        reset,
+      }}
     >
       {children}
     </TimerContext.Provider>
