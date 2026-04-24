@@ -348,6 +348,8 @@ export default function LoginPage() {
       console.log("✅ Login successful!");
       document.cookie =
         "auth-token=logged-in; path=/; max-age=2592000; samesite=lax";
+      const currentUser = foundUser ?? { name: "Erik", email: "erik@gmail.com" };
+      localStorage.setItem("current-user", JSON.stringify({ name: currentUser.name, email: currentUser.email }));
       router.replace("/screen");
     } else {
       setError("Invalid email or password. Please try again.");

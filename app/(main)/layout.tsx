@@ -7,10 +7,12 @@ import {
   Timer,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 const menuItems = [
   {
@@ -46,8 +48,59 @@ export default function MainLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [localUser, setLocalUser] = useState<{ name: string; email: string } | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("current-user");
+    if (stored) setLocalUser(JSON.parse(stored));
+  }, []);
+
+  const user = session?.user ?? localUser;
+
+  const handleSignOut = () => {
+    if (session?.user) {
+      signOut({ callbackUrl: "/login" });
+    } else {
+      localStorage.removeItem("current-user");
+      document.cookie = "auth-token=; path=/; max-age=0";
+      router.replace("/login");
+    }
+  };
+
+  const avatarLetter = user?.name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? "?";
+
+  const ProfileSection = () => (
+    <div className="mt-auto pt-4 border-t border-slate-800">
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
+        {session?.user?.image ? (
+          <img
+            src={session.user.image}
+            alt="avatar"
+            className="w-9 h-9 rounded-full object-cover shrink-0"
+          />
+        ) : (
+          <div className="w-9 h-9 rounded-full bg-blue-500/30 text-blue-300 flex items-center justify-center font-semibold text-sm shrink-0">
+            {avatarLetter}
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-white truncate">
+            {user?.name ?? "Guest"}
+          </p>
+          <p className="text-xs text-slate-400 truncate">{user?.email ?? ""}</p>
+        </div>
+        <button
+          onClick={handleSignOut}
+          title="Sign out"
+          className="text-slate-400 hover:text-red-400 transition-colors shrink-0"
+        >
+          <LogOut size={16} />
+        </button>
+      </div>
+    </div>
+  );
 
   const SidebarContent = () => (
     <>
@@ -90,6 +143,7 @@ export default function MainLayout({
       {/* ✅ Desktop Sidebar */}
       <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 gap-2 bg-slate-900 flex-col p-6 border-r border-slate-800 transition-all ease-in-out ">
         <SidebarContent />
+        <ProfileSection />
       </aside>
 
       {/* ✅ Mobile Sidebar Drawer */}
@@ -102,12 +156,13 @@ export default function MainLayout({
           />
 
           {/* drawer */}
-          <div className="absolute left-0 top-0 h-full w-64 bg-slate-900 p-6 shadow-2xl">
+          <div className="absolute left-0 top-0 h-full w-64 bg-slate-900 p-6 shadow-2xl flex flex-col">
             <button className="mb-6" onClick={() => setOpen(false)}>
               <X />
             </button>
 
             <SidebarContent />
+            <ProfileSection />
           </div>
         </div>
       )}
