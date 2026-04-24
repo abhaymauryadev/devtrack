@@ -1,6 +1,8 @@
 import Streak from "@/components/Streak";
 import { getAllSessions } from "@/models/session.model";
 import type { Session } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
 
 function getWeekBounds() {
   const now = new Date();
@@ -47,6 +49,7 @@ function calcStreak(sessions: { startTime: Date }[]) {
 }
 
 export default async function page() {
+  const session = await getServerSession(authOptions);
   const allSessions = await getAllSessions();
   const { monday, sunday } = getWeekBounds();
 
@@ -122,7 +125,7 @@ export default async function page() {
       <div className="mx-auto max-w-8xl px-6 py-8">
         <header className="mb-8">
           <h1 className="text-3xl font-semibold tracking-tight">
-            Welcome back, Developer
+            Welcome back, {session?.user?.name || "Developer"}
           </h1>
           <p className="mt-2 text-sm text-zinc-400">
             Here&apos;s your coding activity for this week.

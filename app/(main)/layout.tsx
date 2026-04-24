@@ -22,12 +22,6 @@ const menuItems = [
     path: "/dashboard",
   },
   {
-    id: "preivewtracker",
-    label: "Preview Tracker",
-    icon: <Timer />,
-    path: "/previewtracker",
-  },
-  {
     id: "logs",
     label: "Logs",
     icon: <Logs />,
