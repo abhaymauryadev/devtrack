@@ -45,10 +45,10 @@ export default function TimerPreview({
     <div className="relative h-full flex items-center justify-center overflow-hidden">
 
       {/* 🔥 Background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${themes[theme]}`} />
+      <div className={`absolute inset-0 bg-linear-to-br ${themes[theme]}`} />
 
       {/* Glow */}
-      <div className="absolute w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px]" />
+      <div className="absolute w-125 h-125 bg-white/10 rounded-full blur-[120px]" />
 
       {/* Content */}
       <div className="relative z-10 text-center text-white">
