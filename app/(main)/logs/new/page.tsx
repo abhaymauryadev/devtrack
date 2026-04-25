@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "New Log",
+  description: "Create a new session log entry in DevTrack.",
+  robots: { index: false, follow: false },
+};
+
 export default function NewLogPage() {
   return (
     <div className="p-6">

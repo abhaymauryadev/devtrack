@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Streak from "@/components/Streak";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "View your coding session stats, weekly progress, and streak on the DevTrack dashboard.",
+  robots: { index: false, follow: false },
+};
 import { getAllSessions } from "@/models/session.model";
 import type { Session } from "@prisma/client";
 import { getServerSession } from "next-auth";

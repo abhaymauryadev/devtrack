@@ -18,7 +18,16 @@ export const metadata: Metadata = {
     default: "DevTrack – Personal Dev Activity Tracker",
     template: "%s | DevTrack",
   },
-  description: "Track your coding sessions and productivity",
+  description:
+    "DevTrack helps developers track coding sessions, measure productivity, and build consistent focus habits with a built-in Pomodoro timer.",
+  keywords: [
+    "developer productivity",
+    "pomodoro timer",
+    "coding tracker",
+    "focus sessions",
+    "devtrack",
+  ],
+  authors: [{ name: "DevTrack" }],
   manifest: "/site.webmanifest",
   icons: {
     icon: [
@@ -27,6 +36,20 @@ export const metadata: Metadata = {
     ],
     apple: "/icons/apple-touch-icon.png",
   },
+  openGraph: {
+    type: "website",
+    siteName: "DevTrack",
+    title: "DevTrack – Personal Dev Activity Tracker",
+    description:
+      "Track your coding sessions, measure productivity, and build focus habits with DevTrack.",
+  },
+  twitter: {
+    card: "summary",
+    title: "DevTrack – Personal Dev Activity Tracker",
+    description:
+      "Track your coding sessions, measure productivity, and build focus habits with DevTrack.",
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
