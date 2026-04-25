@@ -15,6 +15,7 @@ import {
 import { useWallpaperStore, buildBackground } from "@/store/wallpaperStore";
 import WallpaperSelector from "./WallpaperSelector";
 import { DURATIONS, TimerMode } from "@/context/TimerContext";
+import QuoteDisplay from "./QuoteDisplay";
 
 export default function Timer() {
   const { time, setTime, start, stop, reset, running, mode, setMode, completedPomodoros } =
@@ -82,6 +83,7 @@ export default function Timer() {
         {selected.type === "image" && (
           <div className="absolute inset-0 bg-black/40 pointer-events-none" />
         )}
+        
 
         <button
           onClick={() => setShowWallpaper(true)}
@@ -90,7 +92,7 @@ export default function Timer() {
         >
           <ImageIcon size={20} />
         </button>
-
+        <QuoteDisplay />
         <div className="relative z-10 flex flex-col gap-4 justify-center items-center">
           {/* Mode selection */}
           <div className="flex gap-2">
