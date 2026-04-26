@@ -12,3 +12,16 @@ export const stopSession = async (id: string) => {
   });
   return res.json();
 };
+
+export const updateSessionMeta = async (
+  id: string,
+  tags: string[],
+  note: string,
+) => {
+  const res = await fetch(`/api/v1/session/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tags, note }),
+  });
+  return res.json();
+};

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Sparkles, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const router = useRouter();
@@ -36,12 +36,17 @@ export default function Navbar() {
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
-
             {/* ── Logo ── */}
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="size-8 rounded-lg bg-[#6C3FF5]/10 border border-[#6C3FF5]/20 flex items-center justify-center group-hover:bg-[#6C3FF5]/20 transition-colors">
-                <Sparkles className="size-4 text-[#6C3FF5]" />
+              <div className="">
+                <Image
+                  src="/icons/favicon.svg"
+                  alt="DevTrack Logo"
+                  width={20}
+                  height={20}
+                />
               </div>
+
               <span className="font-semibold text-white tracking-tight">
                 DevTrack
               </span>
@@ -71,7 +76,11 @@ export default function Navbar() {
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+              {mobileOpen ? (
+                <X className="size-5" />
+              ) : (
+                <Menu className="size-5" />
+              )}
             </button>
           </div>
         </div>

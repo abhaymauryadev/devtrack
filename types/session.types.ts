@@ -6,6 +6,8 @@ export interface Session {
   startTime: Date;
   endTime: Date | null;
   duration: number | null; // seconds
+  tags: string[];
+  note: string | null;
   createdAt: Date;
 }
 

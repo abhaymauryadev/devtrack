@@ -32,3 +32,14 @@ export const getAllSessions = async () => {
     orderBy: { createdAt: "desc" },
   });
 };
+
+export const updateSessionMeta = async (
+  id: string,
+  tags: string[],
+  note: string | null,
+) => {
+  return prisma.session.update({
+    where: { id },
+    data: { tags, note },
+  });
+};

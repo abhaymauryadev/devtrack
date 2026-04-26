@@ -12,5 +12,7 @@ model Session {
   startTime DateTime
   endTime   DateTime?
   duration  Int?
+  tags      String[]
+  note      String?
   createdAt DateTime @default(now())
 }

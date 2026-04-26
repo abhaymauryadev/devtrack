@@ -17,11 +17,17 @@ type Session = {
   startTime: string;
   endTime: string | null;
   duration: number | null;
+  tags: string[];
 };
 
 type DayData = {
   date: string;
   hours: number;
+};
+
+type TagData = {
+  name: string;
+  value: number;
 };
 
 function getLevel(hours: number) {
@@ -44,7 +50,9 @@ function buildDayMap(sessions: Session[], days: number): DayData[] {
   for (const s of sessions) {
     const key = new Date(s.startTime).toISOString().split("T")[0];
     if (key in map) {
-      map[key] = parseFloat(((map[key] * 3600 + (s.duration ?? 0)) / 3600).toFixed(2));
+      map[key] = parseFloat(
+        ((map[key] * 3600 + (s.duration ?? 0)) / 3600).toFixed(2),
+      );
     }
   }
 
@@ -53,7 +61,35 @@ function buildDayMap(sessions: Session[], days: number): DayData[] {
     .map(([date, hours]) => ({ date, hours }));
 }
 
-const techData = [
+function buildTagData(sessions: Session[]): TagData[] {
+  const totals: Record<string, number> = {};
+
+  for (const s of sessions) {
+    if (!s.tags || s.tags.length === 0) continue;
+    const durationPerTag = (s.duration ?? 0) / s.tags.length;
+    for (const tag of s.tags) {
+      totals[tag] = (totals[tag] ?? 0) + durationPerTag;
+    }
+  }
+
+  const entries = Object.entries(totals)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 8);
+
+  if (entries.length === 0) return [];
+
+  return entries.map(([name, secs]) => ({
+    name,
+    value: Math.round(secs / 60),
+  }));
+}
+
+const COLORS = [
+  "#6366F1", "#06B6D4", "#EF4444", "#22C55E",
+  "#A855F7", "#F59E0B", "#EC4899", "#14B8A6",
+];
+
+const FALLBACK_TAG_DATA: TagData[] = [
   { name: "React", value: 30 },
   { name: "Node.js", value: 25 },
   { name: "DevOps", value: 15 },
@@ -62,18 +98,11 @@ const techData = [
   { name: "Python", value: 10 },
 ];
 
-const COLORS = [
-  "#6366F1",
-  "#06B6D4",
-  "#EF4444",
-  "#22C55E",
-  "#A855F7",
-  "#F59E0B",
-];
-
 export default function AnalyticsPage() {
   const [activityData, setActivityData] = useState<DayData[]>([]);
   const [heatmapDays, setHeatmapDays] = useState<DayData[]>([]);
+  const [tagData, setTagData] = useState<TagData[]>([]);
+  const [hasRealTags, setHasRealTags] = useState(false);
 
   useEffect(() => {
     fetch("/api/v1/session")
@@ -82,11 +111,23 @@ export default function AnalyticsPage() {
         const thirtyDay = buildDayMap(sessions, 30);
         setActivityData(
           thirtyDay.map((d) => ({
-            date: new Date(d.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+            date: new Date(d.date).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            }),
             hours: d.hours,
-          }))
+          })),
         );
         setHeatmapDays(buildDayMap(sessions, 90));
+
+        const computed = buildTagData(sessions);
+        if (computed.length > 0) {
+          setTagData(computed);
+          setHasRealTags(true);
+        } else {
+          setTagData(FALLBACK_TAG_DATA);
+          setHasRealTags(false);
+        }
       });
   }, []);
 
@@ -124,34 +165,58 @@ export default function AnalyticsPage() {
 
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-          <h2 className="mb-4 text-lg font-semibold">Time by Tech Stack</h2>
-
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={techData}
-                innerRadius={60}
-                outerRadius={90}
-                dataKey="value"
-              >
-                {techData.map((_, index) => (
-                  <Cell key={index} fill={COLORS[index]} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-
-          <div className="flex flex-wrap gap-3 mt-4 text-sm">
-            {techData.map((item, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <span
-                  className="w-3 h-3 rounded-full"
-                  style={{ background: COLORS[i] }}
-                />
-                {item.name}
-              </div>
-            ))}
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold">Time by Tag</h2>
+            {!hasRealTags && (
+              <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded-full">
+                Sample data — add tags in the timer
+              </span>
+            )}
           </div>
+
+          {tagData.length > 0 ? (
+            <>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={tagData}
+                    innerRadius={60}
+                    outerRadius={90}
+                    dataKey="value"
+                    paddingAngle={2}
+                  >
+                    {tagData.map((_, index) => (
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value) =>
+                      hasRealTags ? [`${value} min`, ""] : [`${value}%`, ""]
+                    }
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+
+              <div className="flex flex-wrap gap-3 mt-4 text-sm">
+                {tagData.map((item, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <span
+                      className="w-3 h-3 rounded-full shrink-0"
+                      style={{ background: COLORS[i % COLORS.length] }}
+                    />
+                    <span className="text-slate-300">{item.name}</span>
+                    <span className="text-slate-500 text-xs">
+                      {hasRealTags ? `${item.value}m` : `${item.value}%`}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-center h-[250px] text-slate-500 text-sm">
+              No tag data yet. Add tags to your sessions from the timer.
+            </div>
+          )}
         </div>
 
         <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
