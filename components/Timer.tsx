@@ -50,6 +50,17 @@ export default function Timer() {
 
   useEffect(() => { setMounted(true); }, []);
 
+  // Keep the browser tab in sync with the live countdown
+  useEffect(() => {
+    const m = Math.floor(time / 60);
+    const s = String(time % 60).padStart(2, "0");
+    const modeLabel = mode === "FOCUS" ? "Focus" : mode === "SHORT_BREAK" ? "Break" : "Long Break";
+    document.title = running
+      ? `🔥 ${m}:${s} · ${modeLabel} — DevTrack`
+      : `⏸ ${m}:${s} · ${modeLabel} — DevTrack`;
+    return () => { document.title = "DevTrack"; };
+  }, [time, running, mode]);
+
   useEffect(() => {
     if (mode === "LONG_BREAK") {
       setBreakBanner("Great work! Time for a long break (12 min).");
