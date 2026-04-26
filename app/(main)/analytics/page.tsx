@@ -213,7 +213,7 @@ export default function AnalyticsPage() {
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-[250px] text-slate-500 text-sm">
+            <div className="flex items-center justify-center h-62.5 text-slate-500 text-sm">
               No tag data yet. Add tags to your sessions from the timer.
             </div>
           )}
