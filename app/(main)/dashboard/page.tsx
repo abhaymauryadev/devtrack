@@ -128,13 +128,13 @@ export default async function page() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#070708] text-white">
+    <main className="min-h-screen bg-white text-black/95">
       <div className="mx-auto max-w-8xl px-6 py-8">
         <header className="mb-8">
-          <h1 className="text-3xl font-semibold tracking-tight">
+          <h1 className="text-3xl font-bold tracking-tight">
             Welcome back, {session?.user?.name || "Developer"}
           </h1>
-          <p className="mt-2 text-sm text-zinc-400">
+          <p className="mt-2 text-sm text-[#615d59]">
             Here&apos;s your coding activity for this week.
           </p>
         </header>
@@ -143,29 +143,30 @@ export default async function page() {
           {stats.map((item) => (
             <div
               key={item.title}
-              className="rounded-2xl border border-zinc-800 bg-[#111113] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]"
+              className="rounded-2xl border border-black/10 bg-[#f6f5f4] p-5"
+              style={{ boxShadow: "var(--shadow-card)" }}
             >
               <div className="flex items-start justify-between">
-                <p className="text-sm text-zinc-400">{item.title}</p>
-                <div className={`rounded-xl bg-zinc-950 p-2 ${item.iconColor}`}>
+                <p className="text-sm text-[#615d59]">{item.title}</p>
+                <div className={`rounded-xl bg-white border border-black/10 p-2 ${item.iconColor}`}>
                   <span className="text-lg">{item.icon}</span>
                 </div>
               </div>
 
               <div className="mt-6 flex items-end gap-2">
                 <span className="text-3xl font-semibold">{item.value}</span>
-                <span className="pb-1 text-sm text-zinc-400">
+                <span className="pb-1 text-sm text-[#615d59]">
                   {item.suffix}
                 </span>
               </div>
 
-              <p className="mt-3 text-sm text-zinc-500">{item.note}</p>
+              <p className="mt-3 text-sm text-[#615d59]">{item.note}</p>
             </div>
           ))}
         </section>
 
         <section className="mt-6 grid gap-5 xl:grid-cols-[2fr_1fr]">
-          <div className="rounded-2xl border border-zinc-800 bg-[#111113] p-6">
+          <div className="rounded-2xl border border-black/10 bg-white p-6" style={{ boxShadow: "var(--shadow-card)" }}>
             <div className="mb-8 flex items-center justify-between">
               <h2 className="text-xl font-semibold">Weekly Progress</h2>
             </div>
@@ -178,11 +179,11 @@ export default async function page() {
                 >
                   <div className="flex justify-center">
                     <div
-                      className="w-full max-w-17.5 rounded-t-md bg-indigo-500/90 shadow-[0_0_18px_rgba(99,102,241,0.25)]"
+                      className="w-full max-w-17.5 rounded-t-md bg-[#0075de]"
                       style={{ height: `${(bar.value / maxBar) * 240}px` }}
                     />
                   </div>
-                  <p className="mt-3 text-center text-xs text-zinc-500">
+                  <p className="mt-3 text-center text-xs text-[#615d59]">
                     {bar.day}
                   </p>
                 </div>
@@ -190,14 +191,14 @@ export default async function page() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-[#111113] p-6">
+          <div className="rounded-2xl border border-black/10 bg-[#f6f5f4] p-6" style={{ boxShadow: "var(--shadow-card)" }}>
             <h2 className="text-xl font-semibold">Recent Badges</h2>
 
             <div className="flex h-85 flex-col items-center justify-center text-center">
               <h3 className="mt-6 text-lg font-semibold">
                 <Streak />
               </h3>
-              <p className="mt-2 max-w-xs text-sm leading-6 text-zinc-400">
+              <p className="mt-2 max-w-xs text-sm leading-6 text-[#615d59]">
                 You&apos;re on fire! Code for 7 more days to unlock the Diamond
                 badge.
               </p>

@@ -2,11 +2,14 @@
 
 import { TimerProvider } from "@/context/TimerContext";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
-      <TimerProvider>{children}</TimerProvider>
+      <ThemeProvider>
+        <TimerProvider>{children}</TimerProvider>
+      </ThemeProvider>
     </SessionProvider>
   );
 }

@@ -367,15 +367,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="min-h-screen grid lg:grid-cols-2 bg-white">
       {/* Left Content Section */}
-      <div className="relative hidden lg:flex flex-col justify-between bg-linear-to-br from-primary/90 via-primary to-primary/80 p-12 text-primary-foreground">
+      <div className="relative hidden lg:flex flex-col justify-between bg-[#f6f5f4] p-12 text-black/95 border-r border-black/10">
         <div className="relative z-20">
           <div className="flex items-center gap-2 text-lg font-semibold">
-            <div className="size-8 rounded-lg bg-primary-foreground/10 backdrop-blur-sm flex items-center justify-center">
-              <Sparkles className="size-4" />
+            <div className="size-8 rounded-lg bg-[#f2f9ff] border border-black/10 flex items-center justify-center">
+              <Sparkles className="size-4 text-[#097fe8]" />
             </div>
-            <span className="text-white dark:text-black">DevTrack</span>
+            <span className="text-black/95">DevTrack</span>
           </div>
         </div>
 
@@ -695,60 +695,60 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="relative z-20 flex items-center gap-8 text-sm text-white dark:text-black">
+        <div className="relative z-20 flex items-center gap-8 text-sm text-[#615d59]">
           <a
             href="#"
-            className="hover:text-primary-foreground transition-colors"
+            className="hover:text-black/95 transition-colors"
           >
             Privacy Policy
           </a>
           <a
             href="#"
-            className="hover:text-primary-foreground transition-colors"
+            className="hover:text-black/95 transition-colors"
           >
             Terms of Service
           </a>
           <a
             href="#"
-            className="hover:text-primary-foreground transition-colors"
+            className="hover:text-black/95 transition-colors"
           >
             Contact
           </a>
         </div>
 
         {/* Decorative elements */}
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-size-[20px_20px] bg-[#171717] dark:bg-white" />
-        <div className="absolute top-1/4 right-1/4 size-64 bg-primary-foreground/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/4 size-96 bg-primary-foreground/5 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,117,222,0.08),transparent_45%)]" />
+        <div className="absolute top-1/4 right-1/4 size-64 bg-[#0075de]/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-1/4 size-96 bg-[#0075de]/5 rounded-full blur-3xl" />
       </div>
 
       {/* Right Login Section */}
-      <div className="flex items-center justify-center p-8  ">
+      <div className="flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-105">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-12">
-            <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Sparkles className="size-4 text-primary" />
+            <div className="size-8 rounded-lg bg-[#f2f9ff] border border-black/10 flex items-center justify-center">
+              <Sparkles className="size-4 text-[#097fe8]" />
             </div>
-            <span>YourBrand</span>
+            <span className="text-black/95">DevTrack</span>
           </div>
 
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold tracking-tight mb-2 text-black dark:text-white">
+            <h1 className="text-3xl font-bold tracking-tight mb-2 text-black/95">
               Welcome back!
             </h1>
-            <p className="text-muted-foreground text-sm text-black dark:text-white">
+            <p className="text-sm text-[#615d59]">
               Please enter your details
             </p>
           </div>
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
+            <div className="space-y-2 text-black">
               <Label
                 htmlFor="email"
-                className="text-sm font-medium text-black dark:text-white"
+                className="text-sm font-medium text-white dark:text-black"
               >
                 Email
               </Label>
@@ -762,14 +762,14 @@ export default function LoginPage() {
                 onFocus={() => setIsTyping(true)}
                 onBlur={() => setIsTyping(false)}
                 required
-                className="h-12 bg-background border-border/60 focus:border-primary"
+                className="h-12 bg-white border-black/10 focus:border-[#0075de] rounded-sm"
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 text-black">
               <Label
                 htmlFor="password"
-                className="text-sm font-medium text-black dark:text-white"
+                className="text-sm font-medium text-white dark:text-black"
               >
                 Password
               </Label>
@@ -781,12 +781,12 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-12 pr-10 bg-background border-border/60 focus:border-primary"
+                  className="h-12 pr-10 bg-white border-black/10 focus:border-[#0075de] rounded-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#615d59] hover:text-black/95 transition-colors"
                 >
                   {showPassword ? (
                     <EyeOff className="size-5" />
@@ -802,28 +802,28 @@ export default function LoginPage() {
                 <Checkbox id="remember" />
                 <Label
                   htmlFor="remember"
-                  className="text-sm font-normal cursor-pointer"
+                className="text-sm font-normal cursor-pointer text-[#615d59]"
                 >
                   Remember for 30 days
                 </Label>
               </div>
               <a
                 href="#"
-                className="text-sm text-primary hover:underline font-medium"
+                className="text-sm text-[#0075de] hover:underline font-medium"
               >
                 Forgot password?
               </a>
             </div>
 
             {error && (
-              <div className="p-3 text-sm text-red-400 bg-red-950/20 border border-red-900/30 rounded-lg">
+              <div className="p-3 text-sm text-[#dd5b00] bg-[#fff6ef] border border-[#f3c9ac] rounded-sm">
                 {error}
               </div>
             )}
 
             <Button
               type="submit"
-              className="w-full h-12 text-base font-medium"
+              className="w-full h-12 text-base font-semibold rounded-sm bg-[#0075de] hover:bg-[#005bab] text-white"
               size="lg"
               disabled={isLoading}
             >
@@ -835,7 +835,7 @@ export default function LoginPage() {
           <div className="mt-6">
             <Button
               variant="outline"
-              className="w-full h-12 bg-background border-border/60 hover:bg-accent"
+              className="w-full h-12 bg-white border-black/10 hover:bg-[#f6f5f4] rounded-sm text-black/95"
               type="button"
               onClick={handleGoogleLogin}
               disabled={isLoading}
@@ -846,11 +846,11 @@ export default function LoginPage() {
           </div>
 
           {/* Sign Up Link */}
-          <div className="text-center text-sm text-muted-foreground mt-8">
+          <div className="text-center text-sm text-[#615d59] mt-8">
             Don't have an account?{" "}
             <a
               href="/signup"
-              className="text-foreground font-medium hover:underline"
+              className="text-black/95 font-medium hover:underline"
             >
               Sign Up
             </a>

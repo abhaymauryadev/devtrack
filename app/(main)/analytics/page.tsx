@@ -85,8 +85,8 @@ function buildTagData(sessions: Session[]): TagData[] {
 }
 
 const COLORS = [
-  "#6366F1", "#06B6D4", "#EF4444", "#22C55E",
-  "#A855F7", "#F59E0B", "#EC4899", "#14B8A6",
+  "#0075DE", "#62AEF0", "#2A9D99", "#1AAE39",
+  "#391C57", "#DD5B00", "#FF64C8", "#523410",
 ];
 
 const FALLBACK_TAG_DATA: TagData[] = [
@@ -132,31 +132,31 @@ export default function AnalyticsPage() {
   }, []);
 
   return (
-    <div className="p-6 space-y-6 bg-slate-950 min-h-screen text-white">
+    <div className="p-6 space-y-6 bg-white min-h-screen text-black/95">
       <div>
-        <h1 className="text-2xl font-bold">Deep Analytics</h1>
-        <p className="text-slate-400">
+        <h1 className="text-4xl font-bold tracking-tight" style={{ letterSpacing: "-1.5px" }}>Deep Analytics</h1>
+        <p className="text-[#615d59] mt-1">
           Detailed breakdown of your development time.
         </p>
       </div>
 
-      <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+      <div className="bg-[#f6f5f4] p-6 rounded-2xl border border-black/10" style={{ boxShadow: "var(--shadow-card)" }}>
         <h2 className="mb-4 text-lg font-semibold">30-Day Activity</h2>
 
         <ResponsiveContainer width="100%" height={250}>
           <AreaChart data={activityData}>
-            <XAxis dataKey="date" stroke="#64748B" />
+            <XAxis dataKey="date" stroke="#615d59" />
             <Tooltip />
             <defs>
               <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
+                <stop offset="5%" stopColor="#0075DE" stopOpacity={0.35} />
+                <stop offset="95%" stopColor="#0075DE" stopOpacity={0} />
               </linearGradient>
             </defs>
             <Area
               type="monotone"
               dataKey="hours"
-              stroke="#6366F1"
+              stroke="#0075DE"
               fill="url(#colorGradient)"
             />
           </AreaChart>
@@ -164,11 +164,11 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+        <div className="bg-white p-6 rounded-2xl border border-black/10" style={{ boxShadow: "var(--shadow-card)" }}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Time by Tag</h2>
             {!hasRealTags && (
-              <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded-full">
+              <span className="text-xs text-[#097fe8] bg-[#f2f9ff] px-2 py-1 rounded-full border border-black/10">
                 Sample data — add tags in the timer
               </span>
             )}
@@ -204,8 +204,8 @@ export default function AnalyticsPage() {
                       className="w-3 h-3 rounded-full shrink-0"
                       style={{ background: COLORS[i % COLORS.length] }}
                     />
-                    <span className="text-slate-300">{item.name}</span>
-                    <span className="text-slate-500 text-xs">
+                    <span className="text-black/95">{item.name}</span>
+                    <span className="text-[#615d59] text-xs">
                       {hasRealTags ? `${item.value}m` : `${item.value}%`}
                     </span>
                   </div>
@@ -213,13 +213,13 @@ export default function AnalyticsPage() {
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-62.5 text-slate-500 text-sm">
+            <div className="flex items-center justify-center h-62.5 text-[#615d59] text-sm">
               No tag data yet. Add tags to your sessions from the timer.
             </div>
           )}
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+        <div className="bg-[#f6f5f4] p-6 rounded-2xl border border-black/10" style={{ boxShadow: "var(--shadow-card)" }}>
           <h2 className="mb-4 text-lg font-semibold">Consistency Map</h2>
 
           {heatmapDays.length > 0 && (
@@ -238,12 +238,12 @@ export default function AnalyticsPage() {
                           title={`${day.date} — ${day.hours}h`}
                           className={`w-3 h-3 rounded-sm ${
                             level === 0
-                              ? "bg-slate-800"
+                              ? "bg-[#ece9e6]"
                               : level === 1
-                              ? "bg-indigo-900"
+                              ? "bg-[#cce6fa]"
                               : level === 2
-                              ? "bg-indigo-600"
-                              : "bg-indigo-400"
+                              ? "bg-[#62aef0]"
+                              : "bg-[#0075de]"
                           }`}
                         />
                       );
@@ -253,13 +253,13 @@ export default function AnalyticsPage() {
             </div>
           )}
 
-          <div className="flex items-center justify-between mt-4 text-xs text-slate-400">
+          <div className="flex items-center justify-between mt-4 text-xs text-[#615d59]">
             <span>Less</span>
             <div className="flex gap-1">
-              <div className="w-3 h-3 bg-slate-800 rounded-sm" />
-              <div className="w-3 h-3 bg-indigo-900 rounded-sm" />
-              <div className="w-3 h-3 bg-indigo-600 rounded-sm" />
-              <div className="w-3 h-3 bg-indigo-400 rounded-sm" />
+              <div className="w-3 h-3 bg-[#ece9e6] rounded-sm" />
+              <div className="w-3 h-3 bg-[#cce6fa] rounded-sm" />
+              <div className="w-3 h-3 bg-[#62aef0] rounded-sm" />
+              <div className="w-3 h-3 bg-[#0075de] rounded-sm" />
             </div>
             <span>More</span>
           </div>

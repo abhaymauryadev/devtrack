@@ -69,25 +69,25 @@ export default function LogsPage() {
     <section className="mx-auto max-w-7xl">
       <div className="mb-7 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-semibold tracking-tight text-zinc-100">
+          <h1 className="text-4xl font-bold tracking-tight text-black/95">
             Daily Logs
           </h1>
-          <p className="mt-2 text-base text-zinc-400">
+          <p className="mt-2 text-base text-[#615d59]">
             Review your past coding sessions and notes.
           </p>
         </div>
 
         <button
           onClick={handleExportCSV}
-          className="rounded-xl bg-indigo-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-400"
+          className="rounded-sm bg-[#0075de] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#005bab]"
         >
           Export CSV
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#0d0d10]">
+      <div className="overflow-hidden rounded-2xl border border-black/10 bg-white" style={{ boxShadow: "var(--shadow-card)" }}>
         {sortedSessions.length === 0 && (
-          <div className="px-6 py-10 text-sm text-zinc-400">
+          <div className="px-6 py-10 text-sm text-[#615d59]">
             No session logs yet. Start your timer to create one.
           </div>
         )}
@@ -99,37 +99,37 @@ export default function LogsPage() {
           const hasNote = !!session.note;
 
           return (
-            <div key={session.id} className="border-b border-zinc-800 last:border-b-0">
+            <div key={session.id} className="border-b border-black/10 last:border-b-0">
               <button
                 className="flex w-full items-center gap-4 px-5 py-4 text-left"
                 onClick={() => setExpanded(isOpen ? null : session.id)}
               >
-                <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl border border-zinc-700 bg-zinc-950">
-                  <span className="text-[11px] font-semibold text-indigo-400">
+                <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl border border-black/10 bg-[#f6f5f4]">
+                  <span className="text-[11px] font-semibold text-[#097fe8]">
                     {start.toLocaleString("en-US", { month: "short" }).toUpperCase()}
                   </span>
-                  <span className="text-lg font-semibold text-zinc-100">
+                  <span className="text-lg font-semibold text-black/95">
                     {String(start.getDate()).padStart(2, "0")}
                   </span>
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="truncate text-xl font-medium text-zinc-100">
+                    <p className="truncate text-xl font-semibold text-black/95">
                       {start.toLocaleDateString("en-US", { weekday: "long" })}
                     </p>
-                    <p className="truncate text-sm text-zinc-500">
+                    <p className="truncate text-sm text-[#615d59]">
                       {start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
                     </p>
                   </div>
 
-                  <div className="mt-1 flex items-center gap-3 text-sm text-zinc-400">
+                  <div className="mt-1 flex items-center gap-3 text-sm text-[#615d59]">
                     <span className="flex items-center gap-1.5">
                       <Clock3 className="h-4 w-4" />
                       {formatDuration(session.duration)}
                     </span>
                     {hasNote && (
-                      <span className="flex items-center gap-1 text-indigo-400/70">
+                      <span className="flex items-center gap-1 text-[#097fe8]">
                         <FileText className="h-3.5 w-3.5" />
                         <span className="text-xs">Note</span>
                       </span>
@@ -141,7 +141,7 @@ export default function LogsPage() {
                       {session.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full border border-zinc-700 bg-zinc-900 px-2.5 py-0.5 text-xs text-zinc-300"
+                          className="rounded-full border border-black/10 bg-[#f2f9ff] px-2.5 py-0.5 text-xs text-[#097fe8]"
                         >
                           {tag}
                         </span>
@@ -150,25 +150,25 @@ export default function LogsPage() {
                   )}
 
                   {!hasTags && (
-                    <p className="mt-2 text-xs text-zinc-600 italic">No tags — add them from the timer screen.</p>
+                    <p className="mt-2 text-xs text-[#a39e98] italic">No tags — add them from the timer screen.</p>
                   )}
                 </div>
 
                 <ChevronRight
-                  className={`h-5 w-5 shrink-0 text-zinc-500 transition-transform ${isOpen ? "rotate-90" : ""}`}
+                  className={`h-5 w-5 shrink-0 text-[#615d59] transition-transform ${isOpen ? "rotate-90" : ""}`}
                 />
               </button>
 
               {/* Expanded note */}
               {isOpen && hasNote && (
-                <div className="border-t border-zinc-800/60 px-5 pb-4 pt-3">
-                  <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-zinc-500">Session Note</p>
-                  <p className="whitespace-pre-wrap text-sm text-zinc-300">{session.note}</p>
+                <div className="border-t border-black/10 px-5 pb-4 pt-3">
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#615d59]">Session Note</p>
+                  <p className="whitespace-pre-wrap text-sm text-black/95">{session.note}</p>
                 </div>
               )}
               {isOpen && !hasNote && (
-                <div className="border-t border-zinc-800/60 px-5 pb-4 pt-3">
-                  <p className="text-xs text-zinc-600 italic">No note for this session.</p>
+                <div className="border-t border-black/10 px-5 pb-4 pt-3">
+                  <p className="text-xs text-[#a39e98] italic">No note for this session.</p>
                 </div>
               )}
             </div>

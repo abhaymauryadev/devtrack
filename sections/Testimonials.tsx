@@ -1,103 +1,112 @@
-"use client"
+"use client";
 
 import { TestimonialsColumn } from "@/components/testimonials-columns-1";
 import { motion } from "motion/react";
 
 const testimonials = [
   {
-    text: "This ERP revolutionized our operations, streamlining finance and inventory. The cloud-based platform keeps us productive, even remotely.",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-    name: "Briana Patton",
-    role: "Operations Manager",
+    text: "DevTrack completely changed how I approach my coding sessions. The streak feature alone kept me coding every single day for 90+ days.",
+    image: "https://randomuser.me/api/portraits/men/1.jpg",
+    name: "Alex Rivera",
+    role: "Full Stack Developer",
   },
   {
-    text: "Implementing this ERP was smooth and quick. The customizable, user-friendly interface made team training effortless.",
-    image: "https://randomuser.me/api/portraits/men/2.jpg",
-    name: "Bilal Ahmed",
-    role: "IT Manager",
+    text: "I finally know where my time actually goes. The session logs with tags are exactly what I needed to understand my productivity patterns.",
+    image: "https://randomuser.me/api/portraits/women/2.jpg",
+    name: "Priya Nair",
+    role: "Software Engineer",
   },
   {
-    text: "The support team is exceptional, guiding us through setup and providing ongoing assistance, ensuring our satisfaction.",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    name: "Saman Malik",
-    role: "Customer Support Lead",
+    text: "The Pomodoro timer keeps me honest. 25 minutes of real focus, then a break — DevTrack makes it effortless to stick to.",
+    image: "https://randomuser.me/api/portraits/men/3.jpg",
+    name: "James Liu",
+    role: "Frontend Developer",
   },
   {
-    text: "This ERP's seamless integration enhanced our business operations and efficiency. Highly recommend for its intuitive interface.",
-    image: "https://randomuser.me/api/portraits/men/4.jpg",
-    name: "Omar Raza",
-    role: "CEO",
+    text: "As a freelancer, tracking billable hours used to be a pain. DevTrack turned it into a habit I actually enjoy maintaining.",
+    image: "https://randomuser.me/api/portraits/women/4.jpg",
+    name: "Sara Kowalski",
+    role: "Freelance Developer",
   },
   {
-    text: "Its robust features and quick support have transformed our workflow, making us significantly more efficient.",
-    image: "https://randomuser.me/api/portraits/women/5.jpg",
-    name: "Zainab Hussain",
-    role: "Project Manager",
+    text: "The analytics view is eye-opening. I had no idea I was most productive at 10pm — now I schedule my hardest tasks for then.",
+    image: "https://randomuser.me/api/portraits/men/5.jpg",
+    name: "Marcus Thompson",
+    role: "Backend Engineer",
   },
   {
-    text: "The smooth implementation exceeded expectations. It streamlined processes, improving overall business performance.",
+    text: "Simple, fast, and gets out of my way. DevTrack is the one productivity tool that doesn't become a procrastination tool itself.",
     image: "https://randomuser.me/api/portraits/women/6.jpg",
-    name: "Aliza Khan",
-    role: "Business Analyst",
+    name: "Yuki Tanaka",
+    role: "DevOps Engineer",
   },
   {
-    text: "Our business functions improved with a user-friendly design and positive customer feedback.",
+    text: "I use DevTrack every day. Seeing my coding streak grow is genuinely motivating — it made me 30% more consistent.",
     image: "https://randomuser.me/api/portraits/men/7.jpg",
-    name: "Farhan Siddiqui",
-    role: "Marketing Director",
+    name: "Daniel Osei",
+    role: "Mobile Developer",
   },
   {
-    text: "They delivered a solution that exceeded expectations, understanding our needs and enhancing our operations.",
+    text: "The focus wallpapers are a nice touch. Picking the right background actually helps me get into the zone faster.",
     image: "https://randomuser.me/api/portraits/women/8.jpg",
-    name: "Sana Sheikh",
-    role: "Sales Manager",
+    name: "Chloe Dubois",
+    role: "UI Engineer",
   },
   {
-    text: "Using this ERP, our online presence and conversions significantly improved, boosting business performance.",
+    text: "I recommended DevTrack to my entire team during our hackathon. Clean UI, zero friction, works perfectly.",
     image: "https://randomuser.me/api/portraits/men/9.jpg",
-    name: "Hassan Ali",
-    role: "E-commerce Manager",
+    name: "Raj Patel",
+    role: "Tech Lead",
   },
 ];
-
 
 const firstColumn = testimonials.slice(0, 3);
 const secondColumn = testimonials.slice(3, 6);
 const thirdColumn = testimonials.slice(6, 9);
 
-
-const Testimonials = () => {
+export default function Testimonials() {
   return (
-    <section className="bg-background my-20 relative">
-
-      <div className="container z-10 mx-auto">
+    <section className="bg-white dark:bg-[#191919] py-24 md:py-28 px-6 transition-colors duration-200">
+      <div className="max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="flex flex-col items-center justify-center max-w-135 mx-auto"
+          className="flex flex-col items-center text-center mb-14"
         >
-          <div className="flex justify-center">
-            <div className="border py-1 px-4 rounded-lg">Testimonials</div>
-          </div>
-
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter mt-5">
-            What our users say
+          <span className="inline-flex items-center px-3 py-1 rounded-[9999px] bg-[#f2f9ff] dark:bg-[#0075de]/12 text-[#097fe8] dark:text-[#5eabff] text-[12px] font-semibold tracking-[0.125px] mb-6">
+            Testimonials
+          </span>
+          <h2
+            className="font-bold leading-none text-black/95 dark:text-white/90 mb-4"
+            style={{ fontSize: "48px", letterSpacing: "-1.5px" }}
+          >
+            What developers say
           </h2>
-          <p className="text-center mt-5 opacity-75">
-            See what our customers have to say about us.
+          <p
+            className="text-[20px] font-semibold leading-[1.40] text-[#615d59] dark:text-white/55 max-w-[540px]"
+            style={{ letterSpacing: "-0.125px" }}
+          >
+            Thousands of developers use DevTrack to build consistent coding
+            habits.
           </p>
         </motion.div>
 
-        <div className="flex justify-center gap-6 mt-10 mask-[linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-185 overflow-hidden">
+        <div className="flex justify-center gap-5 mask-[linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)] max-h-185 overflow-hidden">
           <TestimonialsColumn testimonials={firstColumn} duration={15} />
-          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
-          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+          <TestimonialsColumn
+            testimonials={secondColumn}
+            className="hidden md:block"
+            duration={19}
+          />
+          <TestimonialsColumn
+            testimonials={thirdColumn}
+            className="hidden lg:block"
+            duration={17}
+          />
         </div>
       </div>
     </section>
   );
-};
-
-export default Testimonials;
+}

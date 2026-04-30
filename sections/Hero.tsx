@@ -1,29 +1,53 @@
+import Link from "next/link";
+
 export default function Hero() {
   return (
-   <section className="flex items-center justify-center min-h-screen px-4">
-  <div className="flex flex-col justify-center items-center text-center max-w-4xl">
-    
-    <span className="border rounded-full px-4 py-2 text-sm sm:text-base flex items-center gap-2">
-      <span className="bg-purple-500 rounded-full w-3 h-3 sm:w-4 sm:h-4"></span>
-      Built for developers who code
-    </span>
+    <section className="bg-white dark:bg-[#191919] flex items-center justify-center min-h-[calc(100vh-56px)] px-6 py-28 md:py-32 transition-colors duration-200">
+      <div className="flex flex-col items-center text-center max-w-[800px] mx-auto">
+        {/* Badge */}
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[9999px] bg-[#f2f9ff] dark:bg-[#0075de]/12 text-[#097fe8] dark:text-[#5eabff] text-[12px] font-semibold tracking-[0.125px] mb-9">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#097fe8] dark:bg-[#5eabff]" />
+          Built for developers
+        </span>
 
-    <h1 className=" mt-6 font-bold tracking-tight text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight">
-      Track your dev hours <br className="hidden sm:block" />
-      Build your streak
-    </h1>
+        {/* Headline */}
+        <h1
+          className="font-bold leading-none text-black/95 dark:text-white/90 mb-7"
+          style={{
+            fontSize: "clamp(40px, 6.2vw, 64px)",
+            letterSpacing: "clamp(-1.125px, -0.33vw, -2.125px)",
+          }}
+        >
+          Track your dev hours.
+          <br />
+          Build your streak.
+        </h1>
 
-    <p className=" text-gray-400 mt-6 text-sm sm:text-lg md:text-xlleading-relaxed">
-      A minimalist productivity tracker for developers. Monitor coding time,
-      <br className="hidden sm:block" /> maintain streaks, and visualize your progress
-      with tactile analytics
-    </p>
-    
-    <div className="pt-14">
-      <button className="rounded-full p-4 border cursor-pointer bg-gray-900 text-gray-100 dark:text-white text-sm ">Explore Features</button>
-      <button></button>
-    </div>
-  </div>
-</section>
+        {/* Subtitle */}
+        <p
+          className="text-[20px] font-semibold leading-[1.4] text-[#615d59] dark:text-white/55 max-w-[560px] mb-11"
+          style={{ letterSpacing: "-0.125px" }}
+        >
+          A minimalist productivity tracker for developers. Monitor coding
+          time, maintain streaks, and visualize your progress.
+        </p>
+
+        {/* CTAs */}
+        <div className="flex flex-wrap items-center gap-3 justify-center">
+          <Link
+            href="/signup"
+            className="px-5 py-2 text-[15px] font-semibold text-white bg-[#0075de] hover:bg-[#005bab] active:scale-95 rounded-sm border border-transparent"
+          >
+            Get started free
+          </Link>
+          <Link
+            href="#features"
+            className="px-5 py-2 text-[15px] font-semibold text-black/95 dark:text-white/80 underline-offset-4 hover:underline"
+          >
+            Explore features →
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }

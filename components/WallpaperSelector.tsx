@@ -8,6 +8,7 @@ import {
   WallpaperOption,
   WallpaperType,
 } from "@/store/wallpaperStore";
+import { useTheme } from "@/context/ThemeContext";
 
 const CATEGORY_LABELS: Record<WallpaperType | "all", string> = {
   all: "All",
@@ -30,6 +31,7 @@ interface Props {
 export default function WallpaperSelector({ onClose }: Props) {
   const { selected, customUrl, setWallpaper, setCustomUrl } =
     useWallpaperStore();
+  const { theme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<
     WallpaperType | "all"
   >("all");
@@ -74,18 +76,28 @@ export default function WallpaperSelector({ onClose }: Props) {
       />
 
       {/* panel */}
-      <div className="relative w-full sm:max-w-lg bg-slate-900 border border-slate-700 rounded-t-2xl sm:rounded-2xl shadow-2xl z-10 flex flex-col max-h-[90vh]">
+      <div
+        className={`relative w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl z-10 flex flex-col max-h-[90vh] ${
+          theme === "dark"
+            ? "bg-[#1f1f1f] border border-white/10"
+            : "bg-white border border-black/10"
+        }`}
+      >
         {/* header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800 shrink-0">
+        <div
+          className={`flex items-center justify-between px-5 py-4 shrink-0 ${
+            theme === "dark" ? "border-b border-white/10" : "border-b border-black/10"
+          }`}
+        >
           <div className="flex items-center gap-2">
             <ImageIcon size={18} className="text-blue-400" />
-            <h2 className="font-semibold text-white text-sm">
+            <h2 className={`font-semibold text-sm ${theme === "dark" ? "text-white/90" : "text-black/95"}`}>
               Choose Wallpaper
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors"
+            className={`${theme === "dark" ? "text-white/45 hover:text-white/90" : "text-[#615d59] hover:text-black/95"} transition-colors`}
           >
             <X size={18} />
           </button>
@@ -100,7 +112,9 @@ export default function WallpaperSelector({ onClose }: Props) {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 activeCategory === cat
                   ? "bg-blue-600 text-white"
-                  : "bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700"
+                  : theme === "dark"
+                    ? "bg-[#2a2a2a] text-white/45 hover:text-white/90 hover:bg-[#333333]"
+                    : "bg-[#f6f5f4] text-[#615d59] hover:text-black/95 hover:bg-[#ece9e6]"
               }`}
             >
               {CATEGORY_ICONS[cat]}
@@ -133,7 +147,9 @@ export default function WallpaperSelector({ onClose }: Props) {
                     className={`relative w-full aspect-video rounded-lg overflow-hidden border-2 transition-all ${
                       isActive
                         ? "border-blue-500 scale-105 shadow-lg shadow-blue-500/30"
-                        : "border-slate-700 hover:border-slate-500"
+                        : theme === "dark"
+                          ? "border-white/15 hover:border-white/30"
+                          : "border-black/10 hover:border-black/20"
                     }`}
                     style={previewStyle}
                   >
@@ -143,7 +159,13 @@ export default function WallpaperSelector({ onClose }: Props) {
                       </div>
                     )}
                   </div>
-                  <span className="text-[10px] text-slate-400 group-hover:text-slate-200 transition-colors text-center leading-tight truncate w-full">
+                  <span
+                    className={`text-[10px] group-hover:text-[#615d59] transition-colors text-center leading-tight truncate w-full ${
+                      theme === "dark"
+                        ? "text-white/45 group-hover:text-white/80"
+                        : "text-[#a39e98] group-hover:text-[#615d59]"
+                    }`}
+                  >
                     {option.label}
                   </span>
                 </button>
@@ -153,8 +175,12 @@ export default function WallpaperSelector({ onClose }: Props) {
         </div>
 
         {/* custom URL */}
-        <div className="px-5 pb-5 pt-3 border-t border-slate-800 shrink-0">
-          <p className="text-xs text-slate-400 mb-2 flex items-center gap-1">
+        <div
+          className={`px-5 pb-5 pt-3 shrink-0 ${
+            theme === "dark" ? "border-t border-white/10" : "border-t border-black/10"
+          }`}
+        >
+          <p className={`text-xs mb-2 flex items-center gap-1 ${theme === "dark" ? "text-white/45" : "text-[#615d59]"}`}>
             <LinkIcon size={11} /> Custom image URL
           </p>
           <div className="flex gap-2">
@@ -167,7 +193,11 @@ export default function WallpaperSelector({ onClose }: Props) {
               }}
               onKeyDown={(e) => e.key === "Enter" && applyCustomUrl()}
               placeholder="https://example.com/wallpaper.jpg"
-              className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className={`flex-1 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-500 transition-colors ${
+                theme === "dark"
+                  ? "bg-[#2a2a2a] border border-white/15 text-white/90 placeholder:text-white/35"
+                  : "bg-white border border-black/10 text-black/95 placeholder:text-[#a39e98]"
+              }`}
             />
             <button
               onClick={applyCustomUrl}
@@ -177,7 +207,7 @@ export default function WallpaperSelector({ onClose }: Props) {
             </button>
           </div>
           {urlError && (
-            <p className="text-red-400 text-xs mt-1">{urlError}</p>
+            <p className="text-[#dd5b00] text-xs mt-1">{urlError}</p>
           )}
         </div>
       </div>
