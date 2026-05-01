@@ -7,7 +7,8 @@ import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Label } from "@/components/Label";
 import { Checkbox } from "@/components/CheckBox";
-import { Eye, EyeOff, Mail, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Mail } from "lucide-react";
+import Image from "next/image";
 
 interface PupilProps {
   size?: number;
@@ -348,8 +349,14 @@ export default function LoginPage() {
       console.log("✅ Login successful!");
       document.cookie =
         "auth-token=logged-in; path=/; max-age=2592000; samesite=lax";
-      const currentUser = foundUser ?? { name: "Erik", email: "erik@gmail.com" };
-      localStorage.setItem("current-user", JSON.stringify({ name: currentUser.name, email: currentUser.email }));
+      const currentUser = foundUser ?? {
+        name: "Erik",
+        email: "erik@gmail.com",
+      };
+      localStorage.setItem(
+        "current-user",
+        JSON.stringify({ name: currentUser.name, email: currentUser.email }),
+      );
       router.replace("/screen");
     } else {
       setError("Invalid email or password. Please try again.");
@@ -373,7 +380,12 @@ export default function LoginPage() {
         <div className="relative z-20">
           <div className="flex items-center gap-2 text-lg font-semibold">
             <div className="size-8 rounded-lg bg-[#f2f9ff] border border-black/10 flex items-center justify-center">
-              <Sparkles className="size-4 text-[#097fe8]" />
+              <Image
+                src="/icons/favicon.svg"
+                width={500}
+                height={500}
+                alt="Picture of the author"
+              />
             </div>
             <span className="text-black/95">DevTrack</span>
           </div>
@@ -696,22 +708,13 @@ export default function LoginPage() {
         </div>
 
         <div className="relative z-20 flex items-center gap-8 text-sm text-[#615d59]">
-          <a
-            href="#"
-            className="hover:text-black/95 transition-colors"
-          >
+          <a href="#" className="hover:text-black/95 transition-colors">
             Privacy Policy
           </a>
-          <a
-            href="#"
-            className="hover:text-black/95 transition-colors"
-          >
+          <a href="#" className="hover:text-black/95 transition-colors">
             Terms of Service
           </a>
-          <a
-            href="#"
-            className="hover:text-black/95 transition-colors"
-          >
+          <a href="#" className="hover:text-black/95 transition-colors">
             Contact
           </a>
         </div>
@@ -728,7 +731,12 @@ export default function LoginPage() {
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-12">
             <div className="size-8 rounded-lg bg-[#f2f9ff] border border-black/10 flex items-center justify-center">
-              <Sparkles className="size-4 text-[#097fe8]" />
+              <Image
+                src="/icons/favicon.svg"
+                width={500}
+                height={500}
+                alt="Picture of the author"
+              />
             </div>
             <span className="text-black/95">DevTrack</span>
           </div>
@@ -738,9 +746,7 @@ export default function LoginPage() {
             <h1 className="text-3xl font-bold tracking-tight mb-2 text-black/95">
               Welcome back!
             </h1>
-            <p className="text-sm text-[#615d59]">
-              Please enter your details
-            </p>
+            <p className="text-sm text-[#615d59]">Please enter your details</p>
           </div>
 
           {/* Login Form */}
@@ -802,7 +808,7 @@ export default function LoginPage() {
                 <Checkbox id="remember" />
                 <Label
                   htmlFor="remember"
-                className="text-sm font-normal cursor-pointer text-[#615d59]"
+                  className="text-sm font-normal cursor-pointer text-[#615d59]"
                 >
                   Remember for 30 days
                 </Label>

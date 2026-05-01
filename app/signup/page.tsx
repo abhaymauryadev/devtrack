@@ -4,10 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { Mail, Sparkles, Eye, EyeOff } from "lucide-react";
+import { Mail, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Label } from "@/components/Label";
+import Image from "next/image";
 
 // ─────────────────────────────────────────────
 // Types
@@ -348,7 +349,12 @@ export default function SignupPage() {
         <div className="relative z-20">
           <div className="flex items-center gap-2 text-lg font-semibold">
             <div className="size-8 rounded-lg bg-[#f2f9ff] border border-black/10 flex items-center justify-center">
-              <Sparkles className="size-4 text-[#097fe8]" />
+              <Image
+                src="/icons/favicon.svg"
+                width={500}
+                height={500}
+                alt="Picture of the author"
+              />
             </div>
             <span className="text-black/95">DevTrack</span>
           </div>
@@ -585,22 +591,13 @@ export default function SignupPage() {
 
         {/* Footer links */}
         <div className="relative z-20 flex items-center gap-8 text-sm text-[#615d59]">
-          <a
-            href="#"
-            className="hover:text-black/95 transition-colors"
-          >
+          <a href="#" className="hover:text-black/95 transition-colors">
             Privacy Policy
           </a>
-          <a
-            href="#"
-            className="hover:text-black/95 transition-colors"
-          >
+          <a href="#" className="hover:text-black/95 transition-colors">
             Terms of Service
           </a>
-          <a
-            href="#"
-            className="hover:text-black/95 transition-colors"
-          >
+          <a href="#" className="hover:text-black/95 transition-colors">
             Contact
           </a>
         </div>
@@ -617,7 +614,12 @@ export default function SignupPage() {
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-12">
             <div className="size-8 rounded-lg bg-[#f2f9ff] border border-black/10 flex items-center justify-center">
-              <Sparkles className="size-4 text-[#097fe8]" />
+              <Image
+                src="/icons/favicon.svg"
+                width={500}
+                height={500}
+                alt="Picture of the author"
+              />
             </div>
             <span className="text-black/95">DevTrack</span>
           </div>
@@ -634,7 +636,7 @@ export default function SignupPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
+            <div className="space-y-2 text-white dark:text-black">
               <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
@@ -650,7 +652,7 @@ export default function SignupPage() {
               />
             </div>
 
-            <div className="space-y-2 text-black">
+            <div className="space-y-2 text-white dark:text-black">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -666,7 +668,7 @@ export default function SignupPage() {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 text-white dark:text-black">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
@@ -693,7 +695,7 @@ export default function SignupPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 text-white dark:text-black">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
                 id="confirmPassword"

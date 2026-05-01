@@ -34,7 +34,7 @@ export default function Navbar() {
             : ""
         }`}
       >
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-300 mx-auto px-6">
           <div className="flex items-center justify-between h-14">
             <Link href="/" className="flex items-center gap-2">
               <span className="text-[15px] font-bold tracking-tight text-black/95 dark:text-white/90">
@@ -62,13 +62,13 @@ export default function Navbar() {
 
               <Link
                 href="/login"
-                className="px-4 py-[7px] text-[15px] font-semibold text-black/60 dark:text-white/50 hover:text-black/95 dark:hover:text-white/90 hover:bg-black/5 dark:hover:bg-white/6 rounded-sm"
+                className="px-4 py-1.75 text-[15px] font-semibold text-black/60 dark:text-white/50 hover:text-black/95 dark:hover:text-white/90 hover:bg-black/5 dark:hover:bg-white/6 rounded-sm"
               >
                 Log in
               </Link>
               <Link
                 href="/signup"
-                className="px-4 py-[7px] text-[15px] font-semibold text-white bg-[#0075de] hover:bg-[#005bab] active:scale-95 rounded-sm"
+                className="px-4 py-1.75 text-[15px] font-semibold text-white bg-[#0075de] hover:bg-[#005bab] active:scale-95 rounded-sm"
               >
                 Get started free
               </Link>
