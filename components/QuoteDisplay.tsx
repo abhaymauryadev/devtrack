@@ -45,9 +45,9 @@ export default function QuoteDisplay() {
   const quote = QUOTES[quoteIndex];
 
   return (
-    <div className="absolute top-4 left-4 max-w-xs z-10">
-      <p className={`text-sm font-medium italic ${CATEGORY_COLORS[quote.category]}`}>
-        &ldquo;{quote.text}&rdquo;
+    <div className="absolute top-4 left-4 max-w-md z-10">
+      <p className={`text-sm sm:text-2xl md:text-4xl lg:text-4xl font-medium `}>
+        {quote.text}
       </p>
 
     </div>

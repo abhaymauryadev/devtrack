@@ -10,6 +10,7 @@ import { getAllSessions } from "@/models/session.model";
 import type { Session } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
+import { Clock, Flame, Activity, CalendarClockIcon } from "lucide-react";
 
 function getWeekBounds() {
   const now = new Date();
@@ -98,7 +99,7 @@ export default async function page() {
       value: totalHours.toString(),
       suffix: "hrs",
       note: "This week",
-      icon: "🕒",
+      icon: <Clock/>,
       iconColor: "text-cyan-400",
     },
     {
@@ -106,7 +107,7 @@ export default async function page() {
       value: streak.toString(),
       suffix: "days",
       note: streak > 0 ? "Keep it up!" : "Start coding today!",
-      icon: "🔥",
+      icon: <Flame/>,
       iconColor: "text-orange-400",
     },
     {
@@ -114,7 +115,7 @@ export default async function page() {
       value: weekSessions.length.toString(),
       suffix: "logs",
       note: "This week",
-      icon: "〰️",
+      icon: <Activity />,
       iconColor: "text-indigo-400",
     },
     {
@@ -122,7 +123,7 @@ export default async function page() {
       value: consistency.toString(),
       suffix: "%",
       note: `${daysWithSession.size}/7 days active`,
-      icon: "📅",
+      icon: <CalendarClockIcon/>,
       iconColor: "text-emerald-400",
     },
   ];

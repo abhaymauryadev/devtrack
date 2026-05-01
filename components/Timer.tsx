@@ -16,6 +16,7 @@ import {
   Check,
   Moon,
   Sun,
+  Settings,
 } from "lucide-react";
 import { useWallpaperStore, buildBackground } from "@/store/wallpaperStore";
 import WallpaperSelector from "./WallpaperSelector";
@@ -216,7 +217,7 @@ export default function Timer() {
           )}
 
           {/* Timer display */}
-          <div className="text-4xl font-bold lg:text-9xl md:text-7xl sm:text-5xl">
+          <div className="text-6xl font-bold lg:text-9xl md:text-7xl sm:text-6xl">
             {Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}
           </div>
 
@@ -240,14 +241,18 @@ export default function Timer() {
               onClick={handleReset}
               className={`px-4 py-2 rounded-sm cursor-pointer ${theme === "dark" ? "text-white hover:bg-white/10" : "text-black/95 hover:bg-black/10"}`}
             >
+              {/* Timer reset button */}
               <TimerReset />
             </button>
+
+            {/* Pop up button */}
             <button
               onClick={openPopup}
               className={`px-4 py-2 rounded-sm cursor-pointer ${theme === "dark" ? "text-white hover:bg-white/10" : "text-black/95 hover:bg-black/10"}`}
             >
               <PictureInPicture2 />
             </button>
+
             <button
               onClick={() => { setShowTagPanel((v) => !v); setTimeout(() => tagInputRef.current?.focus(), 100); }}
               title="Add tags & note"
@@ -264,16 +269,20 @@ export default function Timer() {
           </div>
 
           <div className="flex justify-center items-center gap-3">
+            {/* Streak component */}
             <Streak />
+
+            {/* Maximize and minimize */}
             {!isFullscreen ? (
               <button
                 onClick={() => { document.documentElement.requestFullscreen(); setIsFullscreen(true); }}
-                className={`border px-4 py-2 rounded-sm cursor-pointer ${
+                className={` px-4 py-2 rounded-sm cursor-pointer ${
                   theme === "dark"
                     ? "border-white/40 text-white hover:bg-white/10"
                     : "border-black/20 text-black/95 hover:bg-black/10"
                 }`}
               >
+
                 <Maximize />
               </button>
             ) : (
@@ -294,7 +303,7 @@ export default function Timer() {
                 theme === "dark" ? "text-white hover:bg-white/10" : "text-black/95 hover:bg-black/10"
               }`}
             >
-              <LayoutDashboard />
+              <Settings />
             </button>
           </div>
 

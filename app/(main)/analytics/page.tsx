@@ -38,6 +38,50 @@ function getLevel(hours: number) {
   return 3;
 }
 
+function cellColor(level: number): string {
+  if (level === 0) return "bg-[#ebedf0] dark:bg-[#161b22]";
+  if (level === 1) return "bg-[#9be9a8] dark:bg-[#0e4429]";
+  if (level === 2) return "bg-[#40c463] dark:bg-[#006d32]";
+  return "bg-[#216e39] dark:bg-[#39d353]";
+}
+
+function organizeIntoWeeks(days: DayData[]): (DayData | null)[][] {
+  const weeks: (DayData | null)[][] = [];
+  if (!days.length) return weeks;
+
+  let week: (DayData | null)[] = [];
+  const firstDow = new Date(days[0].date).getDay();
+  for (let i = 0; i < firstDow; i++) week.push(null);
+
+  for (const day of days) {
+    week.push(day);
+    if (week.length === 7) {
+      weeks.push(week);
+      week = [];
+    }
+  }
+  if (week.length > 0) {
+    while (week.length < 7) week.push(null);
+    weeks.push(week);
+  }
+  return weeks;
+}
+
+function getMonthLabels(weeks: (DayData | null)[][]): { col: number; label: string }[] {
+  const labels: { col: number; label: string }[] = [];
+  let lastMonth = -1;
+  weeks.forEach((week, col) => {
+    const firstDay = week.find((d) => d !== null);
+    if (!firstDay) return;
+    const month = new Date(firstDay.date).getMonth();
+    if (month !== lastMonth) {
+      labels.push({ col, label: new Date(firstDay.date).toLocaleString("default", { month: "short" }) });
+      lastMonth = month;
+    }
+  });
+  return labels;
+}
+
 function buildDayMap(sessions: Session[], days: number): DayData[] {
   const map: Record<string, number> = {};
   const today = new Date();
@@ -238,44 +282,57 @@ export default function AnalyticsPage() {
         <div className="bg-[#f6f5f4] dark:bg-[#242424] p-6 rounded-2xl border border-black/10 dark:border-white/10" style={{ boxShadow: "var(--shadow-card)" }}>
           <h2 className="mb-4 text-lg font-semibold">Consistency Map</h2>
 
-          {heatmapDays.length > 0 && (
-            <div className="flex gap-1 overflow-x-auto">
-              {Array.from({
-                length: Math.ceil(heatmapDays.length / 7),
-              }).map((_, weekIndex) => (
-                <div key={weekIndex} className="flex flex-col gap-1">
-                  {heatmapDays
-                    .slice(weekIndex * 7, weekIndex * 7 + 7)
-                    .map((day, i) => {
-                      const level = getLevel(day.hours);
-                      return (
-                        <div
-                          key={i}
-                          title={`${day.date} — ${day.hours}h`}
-                          className={`w-3 h-3 rounded-sm ${
-                            level === 0
-                              ? "bg-[#ece9e6] dark:bg-[#2a2a2a]"
-                              : level === 1
-                              ? "bg-[#cce6fa] dark:bg-[#1a3a5c]"
-                              : level === 2
-                              ? "bg-[#62aef0]"
-                              : "bg-[#0075de]"
-                          }`}
-                        />
-                      );
-                    })}
+          {heatmapDays.length > 0 && (() => {
+            const weeks = organizeIntoWeeks(heatmapDays);
+            const monthLabels = getMonthLabels(weeks);
+            return (
+              <div className="w-full">
+                {/* Month labels */}
+                <div className="relative h-4 ml-8 mb-1">
+                  {monthLabels.map(({ col, label }) => (
+                    <span
+                      key={col}
+                      className="absolute text-xs text-[#615d59] dark:text-[#a39e98]"
+                      style={{ left: `${(col / weeks.length) * 100}%` }}
+                    >
+                      {label}
+                    </span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
 
-          <div className="flex items-center justify-between mt-4 text-xs text-[#615d59] dark:text-[#a39e98]">
+                <div className="flex">
+                  {/* Day-of-week labels */}
+                  <div className="flex flex-col justify-around w-6 mr-2 shrink-0 text-xs text-[#615d59] dark:text-[#a39e98]">
+                    {["", "Mon", "", "Wed", "", "Fri", ""].map((label, i) => (
+                      <div key={i}>{label}</div>
+                    ))}
+                  </div>
+
+                  {/* Week columns */}
+                  <div className="flex flex-1 gap-0.5">
+                    {weeks.map((week, wi) => (
+                      <div key={wi} className="flex flex-col flex-1 gap-0.5">
+                        {week.map((day, di) => (
+                          <div
+                            key={di}
+                            title={day ? `${day.date} — ${day.hours}h` : undefined}
+                            className={`w-full aspect-square rounded-sm ${day ? cellColor(getLevel(day.hours)) : ""}`}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          <div className="flex items-center gap-2 mt-4 text-xs text-[#615d59] dark:text-[#a39e98]">
             <span>Less</span>
-            <div className="flex gap-1">
-              <div className="w-3 h-3 bg-[#ece9e6] dark:bg-[#2a2a2a] rounded-sm" />
-              <div className="w-3 h-3 bg-[#cce6fa] dark:bg-[#1a3a5c] rounded-sm" />
-              <div className="w-3 h-3 bg-[#62aef0] rounded-sm" />
-              <div className="w-3 h-3 bg-[#0075de] rounded-sm" />
+            <div className="flex gap-0.5">
+              {[0, 1, 2, 3].map((l) => (
+                <div key={l} className={`w-2.5 h-2.5 rounded-sm ${cellColor(l)}`} />
+              ))}
             </div>
             <span>More</span>
           </div>
