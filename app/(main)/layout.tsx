@@ -66,8 +66,8 @@ export default function MainLayout({
   const avatarLetter = user?.name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? "?";
 
   const ProfileSection = () => (
-    <div className="mt-auto pt-4 border-t border-black/10">
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#f6f5f4] border border-black/10">
+    <div className="mt-auto pt-4 border-t border-black/10 dark:border-white/10">
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#f6f5f4] dark:bg-[#242424] border border-black/10 dark:border-white/10">
         {session?.user?.image ? (
           <img
             src={session.user.image}
@@ -75,20 +75,20 @@ export default function MainLayout({
             className="w-9 h-9 rounded-full object-cover shrink-0"
           />
         ) : (
-          <div className="w-9 h-9 rounded-full bg-[#f2f9ff] text-[#097fe8] flex items-center justify-center font-semibold text-sm shrink-0 border border-black/10">
+          <div className="w-9 h-9 rounded-full bg-[#f2f9ff] dark:bg-[#1a2c3d] text-[#097fe8] dark:text-[#62aef0] flex items-center justify-center font-semibold text-sm shrink-0 border border-black/10 dark:border-white/10">
             {avatarLetter}
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-black/95 truncate">
+          <p className="text-sm font-medium text-black/95 dark:text-white/90 truncate">
             {user?.name ?? "Guest"}
           </p>
-          <p className="text-xs text-[#615d59] truncate">{user?.email ?? ""}</p>
+          <p className="text-xs text-[#615d59] dark:text-[#a39e98] truncate">{user?.email ?? ""}</p>
         </div>
         <button
           onClick={handleSignOut}
           title="Sign out"
-          className="text-[#615d59] hover:text-black/95 transition-colors shrink-0"
+          className="text-[#615d59] dark:text-[#a39e98] hover:text-black/95 dark:hover:text-white/90 transition-colors shrink-0"
         >
           <LogOut size={16} />
         </button>
@@ -110,7 +110,7 @@ export default function MainLayout({
             }}
             className={`
               w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all
-              ${isActive ? "bg-[#f2f9ff] text-[#097fe8]" : "text-[#615d59] hover:text-black/95 hover:bg-[#f6f5f4]"}
+              ${isActive ? "bg-[#f2f9ff] dark:bg-[#1a2c3d] text-[#097fe8] dark:text-[#62aef0]" : "text-[#615d59] dark:text-[#a39e98] hover:text-black/95 dark:hover:text-white/90 hover:bg-[#f6f5f4] dark:hover:bg-[#242424]"}
             `}
           >
             {item.icon}
@@ -122,16 +122,16 @@ export default function MainLayout({
   );
 
   return (
-    <div className="flex min-h-screen bg-white text-black/95">
+    <div className="flex min-h-screen bg-white dark:bg-[#191919] text-black/95 dark:text-white/90">
       {/* ✅ Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white flex items-center justify-between px-4 z-50 border-b border-black/10">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white dark:bg-[#191919] flex items-center justify-between px-4 z-50 border-b border-black/10 dark:border-white/10">
         <button onClick={() => setOpen(true)}>
           <Menu />
         </button>
       </div>
 
       {/* ✅ Desktop Sidebar */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 gap-2 bg-white flex-col p-6 border-r border-black/10 transition-all ease-in-out ">
+      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 gap-2 bg-white dark:bg-[#191919] flex-col p-6 border-r border-black/10 dark:border-white/10 transition-all ease-in-out ">
         <SidebarContent />
         <ProfileSection />
       </aside>
@@ -143,7 +143,7 @@ export default function MainLayout({
           <div className="absolute inset-0 bg-black/25" onClick={() => setOpen(false)} />
 
           {/* drawer */}
-          <div className="absolute left-0 top-0 h-full w-64 bg-white p-6 shadow-2xl flex flex-col border-r border-black/10">
+          <div className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-[#191919] p-6 shadow-2xl flex flex-col border-r border-black/10 dark:border-white/10">
             <button className="mb-6" onClick={() => setOpen(false)}>
               <X />
             </button>

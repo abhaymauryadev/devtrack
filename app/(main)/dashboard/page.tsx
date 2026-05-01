@@ -128,13 +128,13 @@ export default async function page() {
   ];
 
   return (
-    <main className="min-h-screen bg-white text-black/95">
+    <main className="min-h-screen bg-white dark:bg-[#191919] text-black/95 dark:text-white/90">
       <div className="mx-auto max-w-8xl px-6 py-8">
         <header className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight">
             Welcome back, {session?.user?.name || "Developer"}
           </h1>
-          <p className="mt-2 text-sm text-[#615d59]">
+          <p className="mt-2 text-sm text-[#615d59] dark:text-[#a39e98]">
             Here&apos;s your coding activity for this week.
           </p>
         </header>
@@ -143,30 +143,30 @@ export default async function page() {
           {stats.map((item) => (
             <div
               key={item.title}
-              className="rounded-2xl border border-black/10 bg-[#f6f5f4] p-5"
+              className="rounded-2xl border border-black/10 dark:border-white/10 bg-[#f6f5f4] dark:bg-[#242424] p-5"
               style={{ boxShadow: "var(--shadow-card)" }}
             >
               <div className="flex items-start justify-between">
-                <p className="text-sm text-[#615d59]">{item.title}</p>
-                <div className={`rounded-xl bg-white border border-black/10 p-2 ${item.iconColor}`}>
+                <p className="text-sm text-[#615d59] dark:text-[#a39e98]">{item.title}</p>
+                <div className={`rounded-xl bg-white dark:bg-[#2a2a2a] border border-black/10 dark:border-white/10 p-2 ${item.iconColor}`}>
                   <span className="text-lg">{item.icon}</span>
                 </div>
               </div>
 
               <div className="mt-6 flex items-end gap-2">
                 <span className="text-3xl font-semibold">{item.value}</span>
-                <span className="pb-1 text-sm text-[#615d59]">
+                <span className="pb-1 text-sm text-[#615d59] dark:text-[#a39e98]">
                   {item.suffix}
                 </span>
               </div>
 
-              <p className="mt-3 text-sm text-[#615d59]">{item.note}</p>
+              <p className="mt-3 text-sm text-[#615d59] dark:text-[#a39e98]">{item.note}</p>
             </div>
           ))}
         </section>
 
         <section className="mt-6 grid gap-5 xl:grid-cols-[2fr_1fr]">
-          <div className="rounded-2xl border border-black/10 bg-white p-6" style={{ boxShadow: "var(--shadow-card)" }}>
+          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#242424] p-6" style={{ boxShadow: "var(--shadow-card)" }}>
             <div className="mb-8 flex items-center justify-between">
               <h2 className="text-xl font-semibold">Weekly Progress</h2>
             </div>
@@ -183,7 +183,7 @@ export default async function page() {
                       style={{ height: `${(bar.value / maxBar) * 240}px` }}
                     />
                   </div>
-                  <p className="mt-3 text-center text-xs text-[#615d59]">
+                  <p className="mt-3 text-center text-xs text-[#615d59] dark:text-[#a39e98]">
                     {bar.day}
                   </p>
                 </div>
@@ -191,14 +191,14 @@ export default async function page() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-black/10 bg-[#f6f5f4] p-6" style={{ boxShadow: "var(--shadow-card)" }}>
+          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-[#f6f5f4] dark:bg-[#1e1e1e] p-6" style={{ boxShadow: "var(--shadow-card)" }}>
             <h2 className="text-xl font-semibold">Recent Badges</h2>
 
             <div className="flex h-85 flex-col items-center justify-center text-center">
               <h3 className="mt-6 text-lg font-semibold">
                 <Streak />
               </h3>
-              <p className="mt-2 max-w-xs text-sm leading-6 text-[#615d59]">
+              <p className="mt-2 max-w-xs text-sm leading-6 text-[#615d59] dark:text-[#a39e98]">
                 You&apos;re on fire! Code for 7 more days to unlock the Diamond
                 badge.
               </p>

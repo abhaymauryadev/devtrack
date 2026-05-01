@@ -12,6 +12,7 @@ import {
 } from "recharts";
 
 import { useEffect, useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
 
 type Session = {
   startTime: string;
@@ -99,6 +100,8 @@ const FALLBACK_TAG_DATA: TagData[] = [
 ];
 
 export default function AnalyticsPage() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [activityData, setActivityData] = useState<DayData[]>([]);
   const [heatmapDays, setHeatmapDays] = useState<DayData[]>([]);
   const [tagData, setTagData] = useState<TagData[]>([]);
@@ -132,21 +135,28 @@ export default function AnalyticsPage() {
   }, []);
 
   return (
-    <div className="p-6 space-y-6 bg-white min-h-screen text-black/95">
+    <div className="p-6 space-y-6 bg-white dark:bg-[#191919] min-h-screen text-black/95 dark:text-white/90">
       <div>
         <h1 className="text-4xl font-bold tracking-tight" style={{ letterSpacing: "-1.5px" }}>Deep Analytics</h1>
-        <p className="text-[#615d59] mt-1">
+        <p className="text-[#615d59] dark:text-[#a39e98] mt-1">
           Detailed breakdown of your development time.
         </p>
       </div>
 
-      <div className="bg-[#f6f5f4] p-6 rounded-2xl border border-black/10" style={{ boxShadow: "var(--shadow-card)" }}>
+      <div className="bg-[#f6f5f4] dark:bg-[#242424] p-6 rounded-2xl border border-black/10 dark:border-white/10" style={{ boxShadow: "var(--shadow-card)" }}>
         <h2 className="mb-4 text-lg font-semibold">30-Day Activity</h2>
 
         <ResponsiveContainer width="100%" height={250}>
           <AreaChart data={activityData}>
-            <XAxis dataKey="date" stroke="#615d59" />
-            <Tooltip />
+            <XAxis dataKey="date" stroke={isDark ? "#a39e98" : "#615d59"} />
+            <Tooltip
+              contentStyle={{
+                background: isDark ? "#2a2a2a" : "#fff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
+                color: isDark ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.95)",
+                borderRadius: "8px",
+              }}
+            />
             <defs>
               <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#0075DE" stopOpacity={0.35} />
@@ -164,11 +174,11 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-black/10" style={{ boxShadow: "var(--shadow-card)" }}>
+        <div className="bg-white dark:bg-[#242424] p-6 rounded-2xl border border-black/10 dark:border-white/10" style={{ boxShadow: "var(--shadow-card)" }}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Time by Tag</h2>
             {!hasRealTags && (
-              <span className="text-xs text-[#097fe8] bg-[#f2f9ff] px-2 py-1 rounded-full border border-black/10">
+              <span className="text-xs text-[#097fe8] dark:text-[#62aef0] bg-[#f2f9ff] dark:bg-[#1a2c3d] px-2 py-1 rounded-full border border-black/10 dark:border-white/10">
                 Sample data — add tags in the timer
               </span>
             )}
@@ -193,6 +203,12 @@ export default function AnalyticsPage() {
                     formatter={(value) =>
                       hasRealTags ? [`${value} min`, ""] : [`${value}%`, ""]
                     }
+                    contentStyle={{
+                      background: isDark ? "#2a2a2a" : "#fff",
+                      border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
+                      color: isDark ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.95)",
+                      borderRadius: "8px",
+                    }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -204,8 +220,8 @@ export default function AnalyticsPage() {
                       className="w-3 h-3 rounded-full shrink-0"
                       style={{ background: COLORS[i % COLORS.length] }}
                     />
-                    <span className="text-black/95">{item.name}</span>
-                    <span className="text-[#615d59] text-xs">
+                    <span className="text-black/95 dark:text-white/90">{item.name}</span>
+                    <span className="text-[#615d59] dark:text-[#a39e98] text-xs">
                       {hasRealTags ? `${item.value}m` : `${item.value}%`}
                     </span>
                   </div>
@@ -213,13 +229,13 @@ export default function AnalyticsPage() {
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-62.5 text-[#615d59] text-sm">
+            <div className="flex items-center justify-center h-62.5 text-[#615d59] dark:text-[#a39e98] text-sm">
               No tag data yet. Add tags to your sessions from the timer.
             </div>
           )}
         </div>
 
-        <div className="bg-[#f6f5f4] p-6 rounded-2xl border border-black/10" style={{ boxShadow: "var(--shadow-card)" }}>
+        <div className="bg-[#f6f5f4] dark:bg-[#242424] p-6 rounded-2xl border border-black/10 dark:border-white/10" style={{ boxShadow: "var(--shadow-card)" }}>
           <h2 className="mb-4 text-lg font-semibold">Consistency Map</h2>
 
           {heatmapDays.length > 0 && (
@@ -238,9 +254,9 @@ export default function AnalyticsPage() {
                           title={`${day.date} — ${day.hours}h`}
                           className={`w-3 h-3 rounded-sm ${
                             level === 0
-                              ? "bg-[#ece9e6]"
+                              ? "bg-[#ece9e6] dark:bg-[#2a2a2a]"
                               : level === 1
-                              ? "bg-[#cce6fa]"
+                              ? "bg-[#cce6fa] dark:bg-[#1a3a5c]"
                               : level === 2
                               ? "bg-[#62aef0]"
                               : "bg-[#0075de]"
@@ -253,11 +269,11 @@ export default function AnalyticsPage() {
             </div>
           )}
 
-          <div className="flex items-center justify-between mt-4 text-xs text-[#615d59]">
+          <div className="flex items-center justify-between mt-4 text-xs text-[#615d59] dark:text-[#a39e98]">
             <span>Less</span>
             <div className="flex gap-1">
-              <div className="w-3 h-3 bg-[#ece9e6] rounded-sm" />
-              <div className="w-3 h-3 bg-[#cce6fa] rounded-sm" />
+              <div className="w-3 h-3 bg-[#ece9e6] dark:bg-[#2a2a2a] rounded-sm" />
+              <div className="w-3 h-3 bg-[#cce6fa] dark:bg-[#1a3a5c] rounded-sm" />
               <div className="w-3 h-3 bg-[#62aef0] rounded-sm" />
               <div className="w-3 h-3 bg-[#0075de] rounded-sm" />
             </div>
